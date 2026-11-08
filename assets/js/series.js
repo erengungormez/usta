@@ -59,7 +59,7 @@ USTA.seriesCard = function (s, opts) {
   var watched = ((USTA.state && USTA.state.series) || {})[s.id] || [];
   var steps = [0, 1, 2].map(function (k) { return '<i style="height:' + (14 + k * 14) + 'px;background:' + (k === idx ? 'var(--red)' : k < idx ? 'rgba(255,255,255,.55)' : 'rgba(255,255,255,.14)') + '"></i>'; }).join('');
   return '<a class="series" href="akademi.html?a=' + s.area + '&s=' + s.id + '" data-series="' + s.id + '">' +
-    '<div class="cover cover-' + s.tier + '"><span class="ep">' + s.eps.length + ' bölüm · ' + USTA.seriesMins(s) + ' dk</span>' + USTA.icon(a.icon, 'ci') +
+    '<div class="cover cover-' + s.tier + '" style="background-image:linear-gradient(180deg,rgba(22,23,27,' + (0.3 + idx * 0.15) + '),rgba(22,23,27,.82)),url(' + USTA.seriesImg(s) + ')"><span class="ep">' + s.eps.length + ' bölüm · ' + USTA.seriesMins(s) + ' dk</span>' + USTA.icon(a.icon, 'ci') +
     '<span class="play"><svg width="18" height="18" viewBox="0 0 18 18"><path d="M5 3l10 6-10 6Z" fill="currentColor"/></svg></span><span class="st">' + steps + '</span></div>' +
     '<div class="sb"><span class="tag">' + (opts.showArea ? a.name + ' · ' : '') + t.name + ' · ' + t.level + '</span><h3>' + USTA.esc(s.title) + '</h3><p class="muted">' + USTA.esc(s.desc) + '</p>' +
     (watched.length ? '<div class="bar" style="margin-top:6px"><i style="width:' + Math.round(100 * watched.length / s.eps.length) + '%"></i></div>' : '') + '</div></a>';

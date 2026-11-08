@@ -267,3 +267,18 @@ USTA.courses = [
 USTA.areaById = function (id) { return USTA.areas.find(function (a) { return a.id === id; }); };
 USTA.levelById = function (id) { return USTA.levels.find(function (l) { return l.id === id; }); };
 USTA.courseById = function (id) { return USTA.courses.find(function (c) { return c.id === id; }); };
+
+/* Ders ve seri görselleri (Wikimedia Commons, künyeler: gorseller.html) */
+USTA.areaImg = {
+  havacilik: 'havacilik', egitim: 'egitim', yazilim: 'yazilim', enerji: 'enerji', uzay: 'uzay', yapayzeka: 'yapayzeka',
+  saglik: 'saglik', deniz: 'deniz', ulasim: 'ulasim', robotik: 'robotik', savunma: 'savunma', haberlesme: 'haberlesme'
+};
+USTA.courseImg = { 'model-roket-tasarimi': 'model-roket', 'iha-temelleri': 'drone', 'goruntu-isleme': 'goruntu' };
+USTA.imgFor = function (courseId, areaId) {
+  return 'assets/img/ders/' + (USTA.courseImg[courseId] || USTA.areaImg[areaId] || 'uzay') + '.jpg';
+};
+USTA.tierImg = { uzay: { kalfa: 'model-roket' }, havacilik: { cirak: 'drone' }, yapayzeka: { usta: 'goruntu' } };
+USTA.seriesImg = function (s) {
+  var o = USTA.tierImg[s.area] && USTA.tierImg[s.area][s.tier];
+  return o ? 'assets/img/ders/' + o + '.jpg' : USTA.imgFor('', s.area);
+};

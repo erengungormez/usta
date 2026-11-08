@@ -85,7 +85,7 @@
     var a = USTA.areaById(c.area), l = USTA.levelById(c.level), p = USTA.courseProgress(c);
     var mins = c.lessons.reduce(function (s, x) { return s + x.d; }, 0);
     return '<a class="course" href="ders.html?id=' + c.id + '">' +
-      '<div class="thumb lv-' + c.level + '">' + USTA.icon(a.icon) + '<span class="tag" style="color:#fff;opacity:.85">' + l.name + '</span></div>' +
+      '<div class="thumb lv-' + c.level + '" style="background-image:linear-gradient(180deg,rgba(22,23,27,.15),rgba(22,23,27,.75)),url(' + USTA.imgFor(c.id, c.area) + ')">' + USTA.icon(a.icon) + '<span class="tag" style="color:#fff;opacity:.85">' + l.name + '</span></div>' +
       '<div class="body"><span class="tag">' + a.name + '</span><h3>' + USTA.esc(c.title) + '</h3><p class="muted" style="font-size:15px">' + USTA.esc(c.summary) + '</p>' +
       (p ? '<div class="bar" style="margin-top:8px"><i style="width:' + p + '%"></i></div>' : '') +
       '<div class="meta"><span>' + c.lessons.length + ' ders</span><span>' + mins + ' dk</span>' + (c.lab ? '<span style="color:var(--red)">Sanal lab</span>' : '') + (p === 100 ? '<span style="color:var(--ok)">Tamamlandı</span>' : '') + '</div></div></a>';
@@ -120,7 +120,7 @@
       '<div><b>Öğren</b><a href="akademi.html">Akademi</a><a href="dersler.html">Ders kataloğu</a><a href="doc.html">Doc</a><a href="lab.html">Sanal laboratuvar</a><a href="koc.html">Yapay zekâ koç</a></div>' +
       '<div><b>İlerle</b><a href="sinav.html">Alan sınavı</a><a href="yarismalar.html">Yarışmalar</a><a href="sertifika.html">Sertifika doğrula</a><a href="panel.html">Panelim</a></div>' +
       '<div><b>Akademi</b><a href="index.html#seviyeler">Seviyeler</a><a href="index.html#nasil">Nasıl çalışır?</a><a href="giris.html?k=1">Kayıt ol</a></div>' +
-      '</div><div class="legal"><span>USTA bir platform önerisidir; içerikler ve ekranlar temsilîdir.</span><span>© 2026 USTA</span></div></div></footer>';
+      '</div><div class="legal"><span>USTA bir platform önerisidir; içerikler ve ekranlar temsilîdir. <a href="gorseller.html" style="text-decoration:underline">Görsel künyeleri</a></span><span>© 2026 USTA</span></div></div></footer>';
   }
 
   document.addEventListener('DOMContentLoaded', function () {
