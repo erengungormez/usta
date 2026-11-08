@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yapay Zekâ Koç — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body{background:var(--ink);color:var(--paper)}
+  .top{background:rgba(22,23,27,.92)!important}
+  .top .logo,.top .nav a.on,.top .nav a:hover{color:var(--paper)}
+  .top .nav{color:#8F8A80}
+  .top .logo .steps i:nth-child(3){background:var(--paper)}
+  .top .btn-ink{background:var(--paper);color:var(--ink)}
+  .top .btn-ghost{color:#B9B3A7}
+  .top.scrolled{border-color:var(--dark-2)!important}
+  .menu-btn span,.menu-btn span::before,.menu-btn span::after{background:var(--paper)!important}
+  @media (max-width:1140px){.nav{background:var(--ink)!important;border-color:var(--dark-2)!important}.nav a{border-color:var(--dark-2)!important}}
+  .chat-wrap{display:grid;grid-template-columns:320px 1fr;gap:40px;padding:48px 0 32px;min-height:calc(100vh - 72px)}
+  .side h1{font-size:clamp(40px,5vw,60px)}
+  .side p{color:#B9B3A7}
+  .rules{margin-top:28px;display:flex;flex-direction:column;gap:12px;font-size:15px}
+  .rules div{display:flex;gap:12px;color:#C9C3B7}
+  .rules b{color:var(--red);font-weight:600}
+  .chat{background:#1F2025;border-radius:28px;display:flex;flex-direction:column;height:calc(100vh - 152px);min-height:520px;overflow:hidden}
+  .chat-head{display:flex;align-items:center;gap:14px;padding:18px 24px;border-bottom:1px solid var(--dark-2)}
+  .av{width:40px;height:40px;border-radius:50%;background:var(--red);display:flex;align-items:flex-end;justify-content:center;gap:2px;padding-bottom:10px;flex-shrink:0}
+  .av i{width:4px;background:#fff;display:block}
+  .msgs{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:14px}
+  .m{max-width:78%;padding:14px 18px;border-radius:20px;font-size:16px;line-height:1.55;animation:pop .25s ease}
+  .m.bot{background:var(--dark-2);color:var(--paper);border-top-left-radius:6px;align-self:flex-start}
+  .m.me{background:var(--paper);color:var(--ink);border-top-right-radius:6px;align-self:flex-end}
+  .m.bot b{color:#FF8A75;font-weight:600}
+  .typing{display:inline-flex;gap:4px}.typing i{width:7px;height:7px;border-radius:50%;background:#8F8A80;animation:bl 1s infinite}
+  .typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+  @keyframes bl{0%,100%{opacity:.3}50%{opacity:1}}
+  @keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .sugg{display:flex;gap:8px;padding:0 24px 14px;overflow-x:auto;scrollbar-width:none}
+  .sugg button{white-space:nowrap;border:1.5px solid var(--dark-3);color:#C9C3B7;border-radius:999px;padding:8px 16px;font-size:14px}
+  .sugg button:hover{border-color:var(--red);color:var(--paper)}
+  .compose{display:flex;gap:10px;padding:16px;border-top:1px solid var(--dark-2)}
+  .compose input{flex:1;min-width:0;background:var(--ink);border:1.5px solid var(--dark-3);border-radius:999px;padding:0 22px;height:52px;outline:0;color:var(--paper)}
+  .compose input:focus{border-color:#6F6B64}
+  @media (max-width:960px){.chat-wrap{grid-template-columns:1fr;gap:24px;padding-top:28px}.rules{display:none}.chat{height:70vh}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main class="wrap">
+  <div class="chat-wrap">
+    <div class="side">
+      <span class="eyebrow">Yapay zekâ koç</span>
+      <h1 style="margin-top:12px">Cevabı vermez, düşündürür.</h1>
+      <p style="margin-top:16px">Koç, ödevini senin yerine yapmaz. Soru sorarak, ipucu vererek seni cevaba yaklaştırır.</p>
+      <div class="rules">
+        <div><b>01</b><span>Önce ne bildiğini sorar.</span></div>
+        <div><b>02</b><span>Takılırsan küçük bir ipucu verir.</span></div>
+        <div><b>03</b><span>Doğru yoldaysan bir sonraki soruya geçer.</span></div>
+      </div>
+      <p style="font-size:13px;margin-top:32px;color:#6F6B64">Bu sayfa bir demodur; koç burada önceden tanımlı kurallarla yanıt verir. Gerçek sürümde yerli bir dil modeli kullanılması önerilmektedir.</p>
+    </div>
+    <div class="chat">
+      <div class="chat-head"><div class="av" aria-hidden="true"><i style="height:6px"></i><i style="height:10px"></i><i style="height:14px"></i><i style="height:18px"></i></div><div><b style="display:block">USTA Koç</b><span style="font-size:13px;color:#8F8A80" id="ctx">Genel</span></div><button class="btn btn-sm" id="reset" style="margin-left:auto;color:#8F8A80">Yeni sohbet</button></div>
+      <div class="msgs" id="msgs" aria-live="polite"></div>
+      <div class="sugg" id="sugg"></div>
+      <form class="compose" id="form"><label class="sr" for="inp">Mesajın</label><input id="inp" placeholder="Koça bir şey sor…" autocomplete="off"><button class="btn btn-red" type="submit">Gönder</button></form>
+    </div>
+  </div>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  /* Sokratik kural tabanlı koç (demo). Her konu, sırayla sorulan adımlardan oluşur. */
+  var topics = {
+    roket: { name: 'Roket', keys: ['roket', 'füze', 'fırlat', 'itki', 'yüksel'], steps: [
+      { ask: 'Güzel soru. Önce şunu düşünelim: bir balonu şişirip ağzını bırakınca ne olur?', expect: ['uçar', 'gider', 'kaçar', 'hareket', 'fırlar', 'ileri'], hint: 'Hava balondan bir yöne çıkarken balon hangi yöne gider? Ters yöne mi, aynı yöne mi?', ok: 'Aynen öyle! Hava bir yöne çıkarken balon <b>ters yöne</b> gider.' },
+      { ask: 'Peki roket motoru gazı hangi yöne püskürtüyor, roket hangi yöne gidiyor?', expect: ['aşağı', 'yukarı', 'ters', 'zıt'], hint: 'Kalkıştaki bir roketin fotoğrafını hayal et: alevler nerede?', ok: 'Harika. Gaz aşağı, roket yukarı. Buna <b>etki-tepki</b> diyoruz; Newton’un üçüncü yasası.' },
+      { ask: 'Son soru: roketin kalkabilmesi için motorun ürettiği kuvvet, roketin ağırlığından nasıl olmalı?', expect: ['büyük', 'fazla', 'çok', 'yüksek', 'güçlü'], hint: 'İki kişi halat çekiyor. Hangisi kazanır?', ok: 'Tebrikler, kendin buldun: <b>itki ağırlıktan büyük</b> olmalı. Şimdi bunu <a href="lab.html" style="color:#FF8A75">sanal laboratuvarda</a> deneyebilirsin.' }
+    ]},
+    kanat: { name: 'Kararlılık', keys: ['kanat', 'kararlı', 'takla', 'denge', 'basınç merkezi', 'ağırlık merkezi'], steps: [
+      { ask: 'Bir ok düşün. Ucundaki ağır demir nerede, tüyler nerede?', expect: ['ön', 'uç', 'arka', 'baş'], hint: 'Okun sivri, ağır ucu hedefe mi bakıyor, sana mı?', ok: 'Evet: ağırlık önde, tüyler arkada.' },
+      { ask: 'Roketteki kanatçıklar okun hangi parçasına benziyor? Ve neden arkada olmaları gerekir sence?', expect: ['tüy', 'arka', 'denge', 'düz', 'yön'], hint: 'Tüyler okun düz gitmesine mi, dönmesine mi yardım eder?', ok: 'Çok iyi. Kanatçıklar tüyler gibi: hava kuvvetlerini arkaya toplayarak roketi düz tutar. Bu yüzden <b>ağırlık merkezi, basınç merkezinin önünde</b> olmalı.' }
+    ]},
+    iha: { name: 'İHA', keys: ['iha', 'İha', 'drone', 'dron', 'pervane', 'quadcopter', 'multikopter'], steps: [
+      { ask: 'Bir İHA havada asılı dururken hangi kuvvetler var sence? En az iki tane söyleyebilir misin?', expect: ['ağırlık', 'yerçekimi', 'itki', 'kaldırma', 'pervane'], hint: 'Biri aracı aşağı çekiyor, diğeri pervanelerden geliyor.', ok: 'Doğru: <b>ağırlık</b> aşağı, pervanelerin <b>itkisi</b> yukarı.' },
+      { ask: 'Bu iki kuvvet nasıl olursa araç yerinde asılı kalır?', expect: ['eşit', 'denk', 'aynı', 'denge'], hint: 'Ne yükselsin ne alçalsın istiyorsak…', ok: 'Mükemmel: <b>itki = ağırlık</b>. İtkiyi artırınca yükselir, azaltınca alçalır.' }
+    ]},
+    ai: { name: 'Yapay zekâ', keys: ['yapay zeka', 'yapay zekâ', 'makine öğren', 'model', 'veri', 'sinir ağ'], steps: [
+      { ask: 'Küçük bir kardeşe kedi ile köpeği ayırt etmeyi nasıl öğretirdin?', expect: ['göster', 'resim', 'örnek', 'fotoğraf', 'bak'], hint: 'Kural mı yazardın, yoksa çok sayıda … mı gösterirdin?', ok: 'Evet! Çok sayıda <b>örnek</b> gösterirdin. Yapay zekâ da böyle öğrenir.' },
+      { ask: 'Peki sadece siyah kedi fotoğrafları gösterirsen, beyaz bir kedi görünce ne olabilir?', expect: ['tanıma', 'karış', 'yanlış', 'bilemez', 'hata', 'tanıyamaz'], hint: 'Hiç görmediği bir şeyle karşılaşınca…', ok: 'Tam olarak. Veri tek taraflıysa model <b>yanılır</b>. Bu yüzden çeşitli veri toplamak en önemli işlerden biri.' }
+    ]},
+    kod: { name: 'Programlama', keys: ['python', 'kod', 'program', 'döngü', 'değişken', 'if', 'yazılım'], steps: [
+      { ask: 'Bilgisayara “10 kez merhaba yaz” demek istiyorsun. Aynı satırı 10 kez mi yazarsın, yoksa başka bir yolu var mı?', expect: ['döngü', 'for', 'while', 'tekrar'], hint: 'Bir işi tekrar tekrar yaptıran yapıya ne denir?', ok: 'Evet, bir <b>döngü</b> kullanırız: <code>for i in range(10): print("merhaba")</code>' },
+      { ask: 'Peki sadece sıcaklık 30’dan büyükse “fan aç” yazdırmak istersen ne kullanırsın?', expect: ['if', 'koşul', 'eğer'], hint: 'Program bir karar vermeli: “eğer…”', ok: 'Süper: bir <b>koşul</b> (if). İkisini birleştirince sensörden sürekli okuyup karar veren bir robot yazmış olursun.' }
+    ]},
+    enerji: { name: 'Enerji', keys: ['enerji', 'verim', 'güneş', 'rüzgar', 'rüzgâr', 'batarya', 'pil'], steps: [
+      { ask: 'Bir ampule 100 birim enerji veriyorsun, 20 birimi ışık oluyor. Geri kalan 80 birim nereye gidiyor sence?', expect: ['ısı', 'sıcak', 'kayıp', 'boşa'], hint: 'Eski ampullere dokununca ne hissedersin?', ok: 'Doğru, büyük kısmı <b>ısıya</b> dönüşüyor.' },
+      { ask: 'O zaman bu ampulün verimi yüzde kaç olur?', expect: ['20', 'yirmi'], hint: 'Faydalı enerji / verilen enerji.', ok: 'Tebrikler: <b>%20</b>. Verimlilik yarışmalarında amaç bu oranı büyütmek.' }
+    ]}
+  };
+  var general = [
+    { keys: ['teknofest', 'yarışma', 'başvur'], text: 'Hangi alanda yarışmak istediğini biliyor musun? <a href="yarismalar.html" style="color:#FF8A75">Yarışmalar</a> sayfasında 12 alanı ve hazırlayan dersleri görebilirsin. Bana bir alan söyle, oradan başlayalım.' },
+    { keys: ['takım', 'arkadaş', 'ekip'], text: 'İyi bir takımda farklı yetenekler olur. Sen hangi işte iyisin: tasarım, yazılım, elektronik, yoksa sunum? Akıllı takım eşleştirme eksik yeteneği tamamlayan arkadaşı bulmana yardım eder.' },
+    { keys: ['sertifika', 'belge'], text: 'Her dersin sonunda bir seviye testi var. %60 ve üzeri ilk denemede doğru cevapla sertifika alırsın; QR kodla doğrulanır. <a href="sertifika.html" style="color:#FF8A75">Sertifika sayfasına</a> bakabilirsin.' },
+    { keys: ['cevab', 'söyle', 'çöz', 'ödev'], text: 'Cevabı doğrudan söylersem öğrenen ben olurum, sen değil. Birlikte düşünelim: soruyu kendi kelimelerinle bana anlatır mısın?' },
+    { keys: ['merhaba', 'selam', 'hey'], text: 'Merhaba! Bugün neyi merak ediyorsun? Roket, İHA, yapay zekâ, programlama ya da enerji hakkında konuşabiliriz.' }
+  ];
+  var dontKnow = ['bilmiyorum', 'bilmem', 'emin değilim', 'fikrim yok', 'yardım', 'ipucu', 'anlamadım'];
+
+  var msgs = document.getElementById('msgs'), inp = document.getElementById('inp');
+  var cur = null, step = 0, misses = 0;
+  var course = USTA.courseById(USTA.param('id'));
+
+  function low(s) { return s.toLocaleLowerCase('tr'); }
+  function has(s, arr) { s = low(s); return arr.some(function (k) { return s.indexOf(low(k)) >= 0; }); }
+  function add(who, html) {
+    var d = document.createElement('div'); d.className = 'm ' + who;
+    if (who === 'me') d.textContent = html; else d.innerHTML = html;
+    msgs.appendChild(d); msgs.scrollTop = msgs.scrollHeight; return d;
+  }
+  function bot(html, delay) {
+    var t = add('bot', '<span class="typing"><i></i><i></i><i></i></span>');
+    setTimeout(function () { t.innerHTML = html; msgs.scrollTop = msgs.scrollHeight; }, delay || 700 + Math.min(html.length * 6, 900));
+  }
+  function setTopic(k) {
+    cur = k; step = 0; misses = 0;
+    document.getElementById('ctx').textContent = k ? topics[k].name : (course ? course.title : 'Genel');
+  }
+  function sugg(list) {
+    document.getElementById('sugg').innerHTML = list.map(function (s) { return '<button type="button">' + s + '</button>'; }).join('');
+  }
+  function reply(text) {
+    if (cur) {
+      var S = topics[cur].steps[step];
+      if (has(text, S.expect)) {
+        step++; misses = 0;
+        if (step < topics[cur].steps.length) { bot(S.ok + '<br><br>' + topics[cur].steps[step].ask); sugg(['Bilmiyorum', 'İpucu ver']); }
+        else { bot(S.ok); setTopic(null); sugg(['Başka bir konu', 'Roket nasıl uçar?', 'Yapay zekâ nasıl öğrenir?']); }
+        return;
+      }
+      if (has(text, dontKnow) || misses >= 1) {
+        misses++;
+        bot(misses > 2 ? 'Sorun değil, bu zor bir basamak. Bir ipucu daha: ' + S.hint + ' İstersen ilgili derse dönüp tekrar bakabiliriz.' : '<b>İpucu:</b> ' + S.hint);
+        return;
+      }
+      misses++;
+      bot('Hmm, tam olarak değil ama düşünmen güzel. Bir daha bak: ' + S.ask.replace(/^[^:]*: /, ''));
+      return;
+    }
+    for (var k in topics) if (has(text, topics[k].keys)) { setTopic(k); bot(topics[k].steps[0].ask); sugg(['Bilmiyorum', 'İpucu ver']); return; }
+    for (var g = 0; g < general.length; g++) if (has(text, general[g].keys)) { bot(general[g].text); return; }
+    if (low(text).indexOf('başka') >= 0) { bot('Tamam! Hangisi: roket, İHA, yapay zekâ, programlama ya da enerji?'); sugg(['Roket', 'İHA', 'Yapay zekâ', 'Python', 'Enerji']); return; }
+    bot('Bunu biraz daha açar mısın? Şu konularda soru sorarak birlikte ilerleyebiliriz: <b>roket</b>, <b>İHA</b>, <b>yapay zekâ</b>, <b>programlama</b>, <b>enerji</b>.');
+    sugg(['Roket nasıl uçar?', 'İHA havada nasıl durur?', 'Yapay zekâ nasıl öğrenir?']);
+  }
+  function start() {
+    msgs.innerHTML = ''; setTopic(null);
+    var u = USTA.user(), name = u ? ' ' + u.name.split(' ')[0] : '';
+    if (course) {
+      bot('Merhaba' + name + '! <b>' + USTA.esc(course.title) + '</b> dersindesin. Hangi kısmı anlamakta zorlandın? Önce sen anlat, ben sorularla yardım edeyim.', 500);
+      var map = { uzay: 'Roket neden yükselir?', havacilik: 'İHA havada nasıl durur?', yapayzeka: 'Yapay zekâ nasıl öğrenir?', yazilim: 'Döngü ne işe yarar?', enerji: 'Verim nedir?', robotik: 'Robot programlamaya nereden başlarım?' };
+      sugg([map[course.area] || 'Bu dersi özetler misin?', 'Kanatçıklar ne işe yarar?', 'Cevabı söyler misin?']);
+    } else {
+      bot('Merhaba' + name + '! Ben USTA Koç. Bugün neyi merak ediyorsun?', 500);
+      sugg(['Roket nasıl uçar?', 'İHA havada nasıl durur?', 'Yapay zekâ nasıl öğrenir?', 'Cevabı söyler misin?', 'TEKNOFEST’e nasıl hazırlanırım?']);
+    }
+  }
+  document.getElementById('form').onsubmit = function (e) {
+    e.preventDefault(); var v = inp.value.trim(); if (!v) return;
+    add('me', v); inp.value = ''; reply(v);
+  };
+  document.getElementById('sugg').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    add('me', b.textContent); reply(b.textContent);
+  };
+  document.getElementById('reset').onclick = start;
+  start();
+</script>
+</body>
+</html>

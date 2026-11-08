@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sertifika — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..600&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  /* ---- sertifika şablonu: A4 yatay, cqw ile ölçeklenir ---- */
+  .cw{container-type:inline-size;width:100%}
+  .cert{position:relative;aspect-ratio:297/210;background:#FFFDF8;color:var(--ink);border-radius:1.2cqw;box-shadow:0 2cqw 5cqw -2cqw rgba(22,23,27,.28);overflow:hidden;font-family:var(--sans)}
+  .cert .f1{position:absolute;inset:1.6cqw;border:.28cqw solid var(--ink);pointer-events:none}
+  .cert .f2{position:absolute;inset:2.3cqw;border:.1cqw solid var(--ink);pointer-events:none}
+  .cert .cn{position:absolute;width:3.4cqw;height:3.4cqw;display:flex;align-items:flex-end;gap:.2cqw}
+  .cert .cn i{display:block;width:.7cqw;background:var(--red)}
+  .cert .cn i:nth-child(1){height:1cqw}.cert .cn i:nth-child(2){height:2cqw}.cert .cn i:nth-child(3){height:3cqw}
+  .cert .cn.tl{left:3.2cqw;top:3.2cqw}.cert .cn.br{right:3.2cqw;bottom:3.2cqw;transform:rotate(180deg)}
+  .cert .in{position:absolute;inset:4.6cqw 7.6cqw;display:flex;flex-direction:column}
+  .cert .hdr{display:flex;justify-content:space-between;align-items:flex-start}
+  .cert .lg{display:flex;align-items:center;gap:1cqw;font-family:var(--serif);font-weight:600;font-size:2.6cqw;letter-spacing:-.02em;margin-left:2.6cqw}
+  .cert .lg .s{display:flex;align-items:flex-end;gap:.18cqw;height:2cqw}
+  .cert .lg .s i{display:block;width:.55cqw;background:var(--ink)}
+  .cert .lg small{display:block;font-family:var(--sans);font-weight:500;font-size:.9cqw;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:.3cqw}
+  .cert .no{text-align:right;font-size:.95cqw;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .cert .no b{display:block;font-size:1.25cqw;letter-spacing:.08em;color:var(--ink);font-weight:600;margin-top:.3cqw}
+  .cert .mid{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+  .cert .kind{font-size:1.25cqw;letter-spacing:.42em;font-weight:600;color:var(--red);text-transform:uppercase;padding-left:.42em}
+  .cert .kind2{font-family:var(--serif);font-style:italic;font-size:1.6cqw;color:var(--muted);margin-top:1.4cqw}
+  .cert .nm{font-family:var(--serif);font-weight:500;font-size:6.2cqw;line-height:1.05;letter-spacing:-.03em;margin-top:.6cqw;padding:0 2cqw .5cqw;border-bottom:.12cqw solid var(--ink);max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cert .tx{font-size:1.55cqw;line-height:1.5;max-width:62cqw;margin-top:1.6cqw;color:#2B2C31}
+  .cert .tx b{font-weight:600;color:var(--ink)}
+  .cert .tx em{font-style:normal;color:var(--red);font-weight:600}
+  .cert .ladder{display:flex;align-items:flex-end;gap:.5cqw;margin-top:2.2cqw}
+  .cert .ladder div{display:flex;flex-direction:column;align-items:center;gap:.5cqw;width:8cqw}
+  .cert .ladder i{display:block;width:100%;background:var(--beige)}
+  .cert .ladder span{font-size:.95cqw;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+  .cert .ladder .p i{background:var(--ink)}
+  .cert .ladder .c i{background:var(--red)}
+  .cert .ladder .c span{color:var(--red)}
+  .cert .bot{display:grid;grid-template-columns:1fr 12cqw 1fr 19cqw;gap:3cqw;align-items:end}
+  .cert .sig svg{width:100%;height:4.6cqw;display:block}
+  .cert .sig b{display:block;border-top:.1cqw solid var(--ink);padding-top:.7cqw;font-size:1.1cqw;font-weight:600}
+  .cert .sig span{display:block;font-size:.95cqw;color:var(--muted)}
+  .cert .seal{width:12cqw;height:12cqw;display:block;transform:rotate(-8deg);margin-bottom:-.6cqw}
+  .cert .qr{display:flex;gap:1cqw;align-items:flex-end;justify-content:flex-end}
+  .cert .qr svg{width:6.6cqw;height:6.6cqw;display:block}
+  .cert .qr div{white-space:nowrap;font-size:.9cqw;color:var(--muted);line-height:1.45;text-align:right}
+  .cert .qr div b{display:block;color:var(--ink);font-weight:600;font-size:1cqw}
+  .cert .ribbon{position:absolute;top:4.2cqw;right:-6.6cqw;transform:rotate(38deg);background:var(--ink);color:#fff;font-size:1.05cqw;font-weight:600;letter-spacing:.3em;text-transform:uppercase;padding:.7cqw 9cqw;padding-left:calc(9cqw + .3em)}
+  .cert .pin{position:absolute;width:2.6cqw;height:2.6cqw;border-radius:50%;background:var(--red);color:#fff;font-size:1.3cqw;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 .5cqw rgba(224,64,43,.2);z-index:3;transition:opacity .2s}
+  .cert.smp .no{margin-right:6cqw}
+  .no-pins .pin{opacity:0;pointer-events:none}
+
+  /* sayfa */
+  .lvsw{display:inline-flex;background:var(--white);border-radius:999px;padding:5px;gap:2px;flex-wrap:wrap}
+  .lvsw button{height:42px;padding:0 18px;border-radius:999px;font-weight:600;font-size:15px;color:var(--muted);display:flex;align-items:center;gap:8px}
+  .lvsw button i{display:block;width:8px;border-radius:2px;background:currentColor}
+  .lvsw button.on{background:var(--ink);color:#fff}
+  .anat{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:28px;counter-reset:a}
+  .anat div{background:var(--white);border-radius:18px;padding:18px 18px 18px 60px;position:relative;font-size:15px}
+  .anat div::before{counter-increment:a;content:counter(a);position:absolute;left:18px;top:18px;width:28px;height:28px;border-radius:50%;background:var(--red);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center}
+  .anat b{display:block;font-weight:600;margin-bottom:2px}
+  .anat span{color:var(--muted)}
+  .ok-pill{display:inline-flex;align-items:center;gap:8px;background:#EAF4EE;color:var(--ok);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600}
+  .no-pill{display:inline-flex;align-items:center;gap:8px;background:var(--red-2);color:var(--red);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:600}
+  .vgrid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:28px;align-items:start;margin-top:32px}
+  .vfacts div{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--line);font-size:15px}
+  .vfacts div span{color:var(--muted)}
+  .vfacts div b{font-weight:600;text-align:right}
+  @media (max-width:1140px){.anat{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:960px){.vgrid{grid-template-columns:1fr}}
+  @media (max-width:600px){.anat{grid-template-columns:1fr}.lvsw button{padding:0 12px;font-size:14px}}
+  @page{size:A4 landscape;margin:0}
+  @media print{
+    body{background:#fff}
+    body *{visibility:hidden}
+    #printme, #printme *{visibility:visible}
+    #printme{position:fixed;left:0;top:0;width:297mm}
+    #printme .cert{border-radius:0;box-shadow:none}
+    #printme .pin{display:none}
+  }
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:56px">
+  <div class="wrap">
+    <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="eyebrow">USTA sertifikası</span><span class="demo-pill">Demo tasarım</span></div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-top:14px">
+      <div style="max-width:720px"><h1 style="font-size:clamp(44px,6vw,84px)">Tek tasarım, dört basamak.</h1>
+      <p class="muted" style="font-size:19px;margin-top:14px">Her alanda, her seviyede aynı belge. Değişen tek şey öğrencinin çıktığı basamak. Okul, kulüp ya da jüri, kodu ya da QR’ı okutarak belgeyi doğrular.</p></div>
+      <div class="lvsw" id="lvsw" role="tablist" aria-label="Seviye"></div>
+    </div>
+    <div class="cw" style="margin-top:32px" id="sample"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-top:16px">
+      <label style="display:flex;gap:10px;align-items:center;font-size:15px;cursor:pointer"><input type="checkbox" id="pins" checked style="accent-color:var(--red);width:18px;height:18px"> Belgenin parçalarını göster</label>
+      <span class="muted" style="font-size:14px">Örnek belge · ad, ders ve kod temsilîdir</span>
+    </div>
+    <div class="anat">
+      <div><b>Basamak rengi</b><span>Ulaşılan seviye kırmızı, geçilenler koyu. Belge bir bakışta okunur.</span></div>
+      <div><b>Öğrencinin adı</b><span>Belgenin en büyük yazısı. Kurum değil, emek veren öne çıkar.</span></div>
+      <div><b>Ders ve alan</b><span>Hangi alanda, hangi derste, kaç puanla geçildiği açıkça yazar.</span></div>
+      <div><b>İmzalar</b><span>Akademi koordinatörü ve alan eğitmeni. Belgede isim değil görev yazar.</span></div>
+      <div><b>Mühür</b><span>Seviyeye göre değişen USTA mührü; basılı kopyada da ayırt edilir.</span></div>
+      <div><b>Kod ve QR</b><span>Her belgeye özel kod. Okutunca doğrulama sayfası açılır.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="verify">
+  <div class="wrap">
+    <div class="head"><h2 style="font-size:clamp(32px,4vw,52px)">Bir belgeyi doğrula</h2><p>Kodu yaz ya da QR’ı okut. Belge gerçekse aynı tasarımla burada görünür.</p></div>
+    <form class="search" id="form" style="max-width:760px;margin-top:24px">
+      <label class="sr" for="kod">Sertifika kodu</label>
+      <input id="kod" placeholder="USTA-XXXX-XXXX" autocomplete="off" style="text-transform:uppercase">
+      <button class="btn btn-ink" type="submit">Doğrula</button>
+    </form>
+    <p class="muted" style="font-size:14px;margin-top:12px">Denemek için örnek kod: <a href="#" id="demo" style="color:var(--red);font-weight:600">USTA-DEMO-2026</a></p>
+    <div id="out"></div>
+    <div id="mine" style="margin-top:72px"></div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var $ = function (id) { return document.getElementById(id); };
+  var LV = ['cirak', 'kalfa', 'usta', 'ustat'];
+  function fmtDate(d) {
+    var m = ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'], p = d.split('-');
+    return +p[2] + ' ' + m[+p[1] - 1] + ' ' + p[0];
+  }
+  var uid = 0;
+  function seal(lvName) {
+    var id = 'sp' + (++uid);
+    return '<svg class="seal" viewBox="0 0 120 120" aria-hidden="true"><defs><path id="' + id + '" d="M60 60m-43 0a43 43 0 1 1 86 0a43 43 0 1 1-86 0"/></defs>' +
+      '<circle cx="60" cy="60" r="57" fill="#E0402B"/><circle cx="60" cy="60" r="53" fill="none" stroke="#FFFDF8" stroke-width="1"/><circle cx="60" cy="60" r="33" fill="none" stroke="#FFFDF8" stroke-width="1"/>' +
+      '<text fill="#FFFDF8" font-family="Geist, Arial, sans-serif" font-size="8.6" font-weight="600" letter-spacing="2.6"><textPath href="#' + id + '">USTA AKADEMİ · DOĞRULANMIŞ BELGE · USTA AKADEMİ ·</textPath></text>' +
+      '<g transform="translate(46 44)" fill="#FFFDF8"><rect x="0" y="12" width="5" height="6"/><rect x="7" y="8" width="5" height="10"/><rect x="14" y="4" width="5" height="14"/><rect x="21" y="0" width="5" height="18"/></g>' +
+      '<text x="60" y="80" text-anchor="middle" fill="#FFFDF8" font-family="Fraunces, Georgia, serif" font-size="13" font-weight="600">' + lvName + '</text></svg>';
+  }
+  var SIG1 = '<svg viewBox="0 0 200 46" aria-hidden="true"><path d="M8 34C20 10 30 8 32 20S26 40 40 30 58 8 64 18 60 36 74 28 90 14 98 22s-2 14 10 8 18-14 26-10 4 10 16 6 26-8 42-6" fill="none" stroke="#16171B" stroke-width="1.6" stroke-linecap="round"/></svg>';
+  var SIG2 = '<svg viewBox="0 0 200 46" aria-hidden="true"><path d="M14 30c10-4 16-22 24-20s-8 26 2 24 16-20 24-18-6 18 4 16 12-14 22-12 0 12 10 10c14-2 22-10 34-8M120 22c8 6 20 10 36 6 10-2 20-6 30-4" fill="none" stroke="#16171B" stroke-width="1.6" stroke-linecap="round"/></svg>';
+
+  /* o: {name, course, area, lv, score, date, code, sample, pins} */
+  function cert(o) {
+    var idx = LV.indexOf(o.lv), lvName = USTA.levelById(o.lv).name;
+    var lad = LV.map(function (l, k) { return '<div class="' + (k === idx ? 'c' : k < idx ? 'p' : '') + '"><i style="height:' + (1.4 + k * 1.3) + 'cqw"></i><span>' + USTA.levelById(l).name + '</span></div>'; }).join('');
+    var pin = function (n, x, y) { return o.pins ? '<span class="pin" style="left:' + x + 'cqw;top:' + y + 'cqw">' + n + '</span>' : ''; };
+    return '<div class="cert' + (o.sample ? ' smp' : '') + '">' +
+      '<span class="f1"></span><span class="f2"></span><span class="cn tl"><i></i><i></i><i></i></span><span class="cn br"><i></i><i></i><i></i></span>' +
+      (o.sample ? '<span class="ribbon">Örnek</span>' : '') +
+      pin(1, 34, 49) + pin(2, 25, 22) + pin(3, 80, 33) + pin(4, 8, 57) + pin(5, 46, 55) + pin(6, 92, 54) +
+      '<div class="in">' +
+        '<div class="hdr"><div class="lg"><span class="s"><i style="height:.55cqw;background:var(--line)"></i><i style="height:1cqw;background:var(--muted-3)"></i><i style="height:1.5cqw"></i><i style="height:2cqw;background:var(--red)"></i></span><span>USTA<small>Ulusal Sertifikalı Teknoloji Akademisi</small></span></div>' +
+        '<div class="no">Belge no<b>' + o.code + '</b></div></div>' +
+        '<div class="mid">' +
+          '<span class="kind">Başarı Sertifikası</span>' +
+          '<span class="kind2">Bu belge</span>' +
+          '<span class="nm">' + USTA.esc(o.name) + '</span>' +
+          '<p class="tx">adlı öğrencinin <b>' + o.area + '</b> alanında <b>' + USTA.esc(o.course) + '</b> dersini tamamladığını, alan sınavından <b>%' + o.score + '</b> alarak <em>' + lvName + '</em> basamağına ulaştığını belgeler.</p>' +
+          '<div class="ladder">' + lad + '</div>' +
+        '</div>' +
+        '<div class="bot">' +
+          '<div class="sig">' + SIG1 + '<b>Akademi Koordinatörü</b><span>USTA Akademi</span></div>' +
+          '<div style="display:flex;justify-content:center">' + seal(lvName) + '</div>' +
+          '<div class="sig">' + SIG2 + '<b>Alan Eğitmeni</b><span>' + o.area + '</span></div>' +
+          '<div class="qr">' + '<div>Düzenlenme<b>' + fmtDate(o.date) + '</b>doğrulama için<br>QR’ı okut</div>' + USTA.qr(o.code, 120) + '</div>' +
+        '</div>' +
+      '</div></div>';
+  }
+
+  /* ---- örnek: seviye değiştirici ---- */
+  var SAMPLES = {
+    cirak: { course: 'roket-nasil-ucar', score: 92 },
+    kalfa: { course: 'model-roket-tasarimi', score: 86 },
+    usta: { course: 'iha-otonom', score: 81 },
+    ustat: { course: null, title: 'Orta irtifa roket görevi (proje)', area: 'Uzay ve Roket', score: 95 }
+  };
+  var cur = 'kalfa', showPins = true;
+  function sample() {
+    var s = SAMPLES[cur], co = s.course ? USTA.courseById(s.course) : null;
+    $('sample').innerHTML = cert({ name: 'Elif Yılmaz', course: co ? co.title : s.title, area: co ? USTA.areaById(co.area).name : s.area, lv: cur, score: s.score, date: '2026-10-02', code: 'USTA-ORNK-' + (LV.indexOf(cur) + 1) + '0' + (LV.indexOf(cur) + 2) + '6', sample: true, pins: true });
+    $('sample').classList.toggle('no-pins', !showPins);
+    $('lvsw').innerHTML = LV.map(function (l, k) { return '<button role="tab" aria-selected="' + (l === cur) + '" class="' + (l === cur ? 'on' : '') + '" data-l="' + l + '"><i style="height:' + (6 + k * 4) + 'px"></i>' + USTA.levelById(l).name + '</button>'; }).join('');
+  }
+  $('lvsw').onclick = function (e) { var b = e.target.closest('[data-l]'); if (b) { cur = b.dataset.l; sample(); } };
+  $('pins').onchange = function () { showPins = this.checked; $('sample').classList.toggle('no-pins', !showPins); };
+  sample();
+
+  /* ---- doğrulama ---- */
+  var inp = $('kod');
+  function show(code, scroll) {
+    var out = $('out');
+    if (!code) { out.innerHTML = ''; return; }
+    var c = USTA.findCert(code);
+    history.replaceState(null, '', 'sertifika.html?kod=' + encodeURIComponent(code.trim().toUpperCase()));
+    if (!c) {
+      out.innerHTML = '<div class="card" style="max-width:760px;margin-top:32px"><span class="no-pill">Kayıt bulunamadı</span><p style="margin-top:14px;font-size:17px">“' + USTA.esc(code) + '” koduyla bir sertifika yok. Kodu kontrol et; harfler ve tireler önemli.</p><p class="muted" style="font-size:14px;margin-top:8px">Bu demoda sertifikalar yalnızca bu tarayıcıda saklanır; başka bir cihazda alınan kod burada görünmez.</p></div>';
+      return;
+    }
+    var co = USTA.courseById(c.cid), a = USTA.areaById(co.area), lv = USTA.levelById(co.level);
+    out.innerHTML = '<div class="vgrid">' +
+      '<div class="cw" id="printme">' + cert({ name: c.name, course: co.title, area: a.name, lv: co.level, score: c.score, date: c.date, code: c.code }) + '</div>' +
+      '<div class="card"><span class="ok-pill"><svg width="14" height="14" viewBox="0 0 14 14"><path d="M2 7.5l3 3 7-7" stroke="currentColor" stroke-width="2" fill="none"/></svg>Doğrulandı' + (c.demo ? ' · örnek kayıt' : '') + '</span>' +
+        '<div class="vfacts" style="margin-top:18px"><div><span>Öğrenci</span><b>' + USTA.esc(c.name) + '</b></div><div><span>Ders</span><b>' + USTA.esc(co.title) + '</b></div><div><span>Alan</span><b>' + a.name + '</b></div><div><span>Basamak</span><b style="color:var(--red)">' + lv.name + '</b></div><div><span>Puan</span><b>%' + c.score + '</b></div><div><span>Tarih</span><b>' + fmtDate(c.date) + '</b></div></div>' +
+        '<div style="display:flex;flex-direction:column;gap:10px;margin-top:20px"><button class="btn btn-ink" onclick="window.print()">Yazdır / PDF</button><button class="btn btn-line" id="copy">Bağlantıyı kopyala</button><a class="btn btn-ghost" href="ders.html?id=' + co.id + '">Derse git →</a></div>' +
+        '<p class="muted" style="font-size:13px;margin-top:14px">Doğrulama temsilîdir; gerçek sürümde kayıtlar merkezi olarak tutulur.</p></div>' +
+      '</div>';
+    $('copy').onclick = function () {
+      var url = location.href;
+      (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () { USTA.toast('Bağlantı kopyalandı.'); }, function () { USTA.toast(url); });
+    };
+    if (scroll) $('verify').scrollIntoView({ behavior: 'smooth' });
+  }
+  function mine() {
+    var list = USTA.state.certs, el = $('mine');
+    if (!list.length) {
+      el.innerHTML = '<div class="card" style="display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><div><h3>Henüz sertifikan yok.</h3><p class="muted" style="margin-top:6px">Bir dersi bitirip testi geç ya da alan sınavına gir; belgen burada belirsin.</p></div><div style="display:flex;gap:10px;flex-wrap:wrap"><a class="btn btn-red" href="sinav.html">Alan sınavına gir</a><a class="btn btn-line" href="akademi.html">Akademi</a></div></div>';
+      return;
+    }
+    el.innerHTML = '<div class="head" style="margin-bottom:24px"><h2 style="font-size:clamp(32px,4vw,48px)">Sertifikalarım</h2></div><div class="grid g3">' +
+      list.map(function (c) {
+        var co = USTA.courseById(c.cid), lv = USTA.levelById(co.level);
+        return '<a class="card" href="sertifika.html?kod=' + c.code + '" data-code="' + c.code + '" style="display:flex;gap:18px;align-items:center"><span style="color:var(--ink);flex-shrink:0">' + USTA.qr(c.code, 64) + '</span><span><span class="tag">' + lv.name + '</span><b style="display:block;font-weight:600;margin-top:4px">' + USTA.esc(co.title) + '</b><span class="muted" style="font-size:13px">' + c.code + '</span></span></a>';
+      }).join('') + '</div>';
+    el.onclick = function (e) {
+      var a = e.target.closest('[data-code]'); if (!a) return;
+      e.preventDefault(); inp.value = a.dataset.code; show(a.dataset.code, true);
+    };
+  }
+  $('form').onsubmit = function (e) { e.preventDefault(); show(inp.value); };
+  $('demo').onclick = function (e) { e.preventDefault(); inp.value = 'USTA-DEMO-2026'; show(inp.value); };
+  var k = USTA.param('kod'); if (k) { inp.value = k; show(k); setTimeout(function () { $('verify').scrollIntoView(); }, 50); }
+  mine();
+</script>
+</body>
+</html>

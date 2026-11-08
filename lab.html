@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sanal Lab — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .lab{display:grid;grid-template-columns:340px 1fr;gap:28px;align-items:start;margin-top:36px}
+  .ctrl{display:flex;flex-direction:column;gap:26px}
+  .ctrl label{display:flex;justify-content:space-between;font-size:15px;font-weight:600}
+  .ctrl label span{font-family:var(--serif);font-size:24px;font-weight:500;color:var(--red)}
+  .ctrl small{display:block;color:var(--muted);font-size:13px;margin-top:6px}
+  input[type=range]{width:100%;margin-top:10px;accent-color:var(--red)}
+  .stage{background:var(--ink);border-radius:28px;overflow:hidden;position:relative}
+  .stage canvas{display:block;width:100%;height:auto}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--dark-2);border-top:1px solid var(--dark-2)}
+  .stats div{background:var(--ink);padding:18px 22px;color:var(--paper)}
+  .stats b{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(28px,3.4vw,44px);letter-spacing:-.02em}
+  .stats span{font-size:13px;color:#8F8A80}
+  .verdict{padding:16px 22px;font-size:15px;color:#C9C3B7;border-top:1px solid var(--dark-2);min-height:56px}
+  .verdict b{color:#FF8A75}
+  .verdict.ok b{color:#7BC8A4}
+  .log{margin-top:20px;font-size:14px}
+  .log div{display:flex;justify-content:space-between;padding:10px 0;border-top:1px solid var(--line)}
+  @media (max-width:960px){.lab{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:56px">
+  <div class="wrap">
+    <span class="eyebrow">Sanal laboratuvar</span>
+    <h1 style="margin-top:12px;font-size:clamp(44px,6vw,76px)">Fırlat, gözle, düzelt.</h1>
+    <p class="muted" style="font-size:19px;max-width:640px;margin-top:14px">Model roketini ayarla ve fırlat. Kanatçık sayısı, yakıt miktarı ve fırlatma açısının uçuşu nasıl değiştirdiğini kendin keşfet. Malzeme yok, risk yok, deneme sınırsız.</p>
+
+    <div class="lab">
+      <div class="card ctrl">
+        <div>
+          <label for="fins">Kanatçık sayısı <span id="finsV"></span></label>
+          <input type="range" id="fins" min="0" max="6" step="1" value="3">
+          <small>Kanatçıklar roketi düz tutar ama sürtünme de ekler.</small>
+        </div>
+        <div>
+          <label for="fuel">Yakıt <span id="fuelV"></span></label>
+          <input type="range" id="fuel" min="10" max="80" step="5" value="40">
+          <small>Daha çok yakıt daha uzun itki demek; ama roket de ağırlaşır.</small>
+        </div>
+        <div>
+          <label for="ang">Fırlatma açısı <span id="angV"></span></label>
+          <input type="range" id="ang" min="60" max="90" step="1" value="85">
+          <small>90° tam dikey. Güvenlik için rampa 60°’nin altına inmez.</small>
+        </div>
+        <div>
+          <label for="nose">Burun konisi</label>
+          <div style="display:flex;gap:8px;margin-top:10px" id="nose">
+            <button class="chip" data-v="duz">Düz</button><button class="chip on" data-v="ogive">Sivri</button><button class="chip" data-v="yuvarlak">Yuvarlak</button>
+          </div>
+        </div>
+        <button class="btn btn-red btn-lg" id="launch" style="width:100%">Fırlat</button>
+        <div class="log" id="log"></div>
+      </div>
+
+      <div>
+        <div class="stage">
+          <canvas id="cv" width="1200" height="680" aria-label="Uçuş yörüngesi"></canvas>
+          <div class="stats">
+            <div><b id="sApo">—</b><span>Tepe noktası</span></div>
+            <div><b id="sRange">—</b><span>Yatay mesafe</span></div>
+            <div><b id="sTime">—</b><span>Uçuş süresi</span></div>
+          </div>
+          <div class="verdict" id="verdict">Ayarları seç ve <b>Fırlat</b>’a bas.</div>
+        </div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:20px;align-items:center">
+          <a class="btn btn-line" href="ders.html?id=model-roket-tasarimi">Model roket tasarımı dersi</a>
+          <a class="btn btn-ghost" href="koc.html?id=model-roket-tasarimi">Sonucu koça yorumlat →</a>
+        </div>
+        <p class="muted" style="font-size:13px;margin-top:16px">Basitleştirilmiş eğitim modelidir; gerçek uçuş değerlerini göstermez. Gerçek fırlatmalar yalnızca yetişkin gözetiminde ve kurallara uygun alanlarda yapılır.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var $ = function (id) { return document.getElementById(id); };
+  var cv = $('cv'), ctx = cv.getContext('2d'), W = cv.width, H = cv.height;
+  var nose = 'ogive', flights = [], anim = null;
+  var noseCd = { duz: 0.9, ogive: 0.45, yuvarlak: 0.6 };
+
+  function labels() {
+    $('finsV').textContent = $('fins').value;
+    $('fuelV').textContent = $('fuel').value + ' g';
+    $('angV').textContent = $('ang').value + '°';
+  }
+  ['fins', 'fuel', 'ang'].forEach(function (k) { $(k).oninput = labels; });
+  $('nose').onclick = function (e) {
+    var b = e.target.closest('.chip'); if (!b) return;
+    nose = b.dataset.v;
+    [].forEach.call(this.children, function (c) { c.classList.toggle('on', c === b); });
+  };
+
+  /* Basit 2B uçuş modeli: itki, yerçekimi, hava sürtünmesi. Kararsız roket yalpalar. */
+  function simulate(fins, fuelG, angDeg, nz) {
+    var g = 9.81, dry = 0.12, fuel = fuelG / 1000, burnRate = 0.025, thrust = 9;
+    var stable = fins >= 3, wobbly = fins < 3;
+    var cd = noseCd[nz] + fins * 0.06 + (wobbly ? 0.8 : 0), area = 0.0012, rho = 1.2;
+    var th = angDeg * Math.PI / 180, x = 0, y = 0, vx = 0, vy = 0, t = 0, dt = 0.01, pts = [[0, 0]], apo = 0;
+    var spin = 0;
+    while (t < 60) {
+      var m = dry + fuel, F = 0;
+      if (fuel > 0) { F = thrust; fuel = Math.max(0, fuel - burnRate * dt); }
+      var v = Math.hypot(vx, vy);
+      if (v > 1) th = Math.atan2(vy, vx);
+      if (wobbly && v > 1) { spin += dt * (4 - fins) * 3.2; th += Math.sin(spin * 3) * 0.06 * (3 - fins); }
+      var D = 0.5 * rho * cd * area * v * v;
+      var ax = (F * Math.cos(th) - (v ? D * vx / v : 0)) / m;
+      var ay = (F * Math.sin(th) - (v ? D * vy / v : 0)) / m - g;
+      vx += ax * dt; vy += ay * dt; x += vx * dt; y += vy * dt; t += dt;
+      if (y < 0 && t > 0.2) { y = 0; break; }
+      if (y > apo) apo = y;
+      if (Math.round(t / dt) % 4 === 0) pts.push([x, y]);
+    }
+    pts.push([x, 0]);
+    return { pts: pts, apo: apo, range: Math.abs(x), time: t, stable: stable, fins: fins, fuel: fuelG, ang: angDeg, nose: nz };
+  }
+
+  function grid(sx, sy, maxX, maxY) {
+    ctx.fillStyle = '#16171B'; ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = '#2E2F35'; ctx.lineWidth = 1; ctx.fillStyle = '#6F6B64'; ctx.font = '22px Geist, Arial';
+    var stepY = niceStep(maxY), stepX = niceStep(maxX);
+    for (var yv = 0; yv <= maxY; yv += stepY) { var py = H - 70 - yv * sy; ctx.beginPath(); ctx.moveTo(80, py); ctx.lineTo(W - 30, py); ctx.stroke(); ctx.fillText(yv + ' m', 14, py + 7); }
+    for (var xv = stepX; xv <= maxX; xv += stepX) { var px = 80 + xv * sx; ctx.fillText(xv + ' m', px - 20, H - 36); }
+    ctx.fillStyle = '#2E2F35'; ctx.fillRect(0, H - 70, W, 70);
+    ctx.fillStyle = '#8F8A80'; ctx.fillRect(60, H - 86, 40, 16);
+  }
+  function niceStep(v) { var s = [5, 10, 20, 25, 50, 100, 200, 250, 500]; for (var i = 0; i < s.length; i++) if (v / s[i] <= 6) return s[i]; return 1000; }
+
+  function drawPath(f, sx, sy, upto, color, width) {
+    ctx.strokeStyle = color; ctx.lineWidth = width; ctx.setLineDash(color === '#E0402B' ? [] : [8, 10]);
+    ctx.beginPath();
+    for (var i = 0; i <= upto && i < f.pts.length; i++) { var p = f.pts[i], X = 80 + p[0] * sx, Y = H - 70 - p[1] * sy; i ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+    ctx.stroke(); ctx.setLineDash([]);
+  }
+  function rocket(X, Y, ang) {
+    ctx.save(); ctx.translate(X, Y); ctx.rotate(-ang);
+    ctx.fillStyle = '#F6F3EC'; ctx.beginPath(); ctx.moveTo(26, 0); ctx.lineTo(12, -7); ctx.lineTo(-16, -7); ctx.lineTo(-16, 7); ctx.lineTo(12, 7); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = '#E0402B'; ctx.beginPath(); ctx.moveTo(-10, -7); ctx.lineTo(-20, -15); ctx.lineTo(-20, -7); ctx.fill(); ctx.beginPath(); ctx.moveTo(-10, 7); ctx.lineTo(-20, 15); ctx.lineTo(-20, 7); ctx.fill();
+    ctx.restore();
+  }
+
+  function scaleFor(list) {
+    var mx = 40, my = 40;
+    list.forEach(function (f) { mx = Math.max(mx, f.range * 1.1); my = Math.max(my, f.apo * 1.15); });
+    return { sx: (W - 130) / mx, sy: (H - 120) / my, mx: mx, my: my };
+  }
+  function idle() {
+    var s = scaleFor(flights); grid(s.sx, s.sy, s.mx, s.my);
+    flights.slice(1).forEach(function (f) { drawPath(f, s.sx, s.sy, 1e9, '#5A5B62', 3); });
+    if (flights[0]) drawPath(flights[0], s.sx, s.sy, 1e9, '#E0402B', 5);
+    else rocket(80, H - 86, Math.PI / 2 * (+$('ang').value / 90));
+  }
+
+  $('launch').onclick = function () {
+    if (anim) clearTimeout(anim);
+    var f = simulate(+$('fins').value, +$('fuel').value, +$('ang').value, nose);
+    flights.unshift(f); flights = flights.slice(0, 4);
+    var s = scaleFor(flights), i = 0, n = f.pts.length, t0 = Date.now(), dur = 2600;
+    ['sApo', 'sRange', 'sTime'].forEach(function (k) { $(k).textContent = '…'; });
+    $('verdict').className = 'verdict'; $('verdict').innerHTML = 'Uçuşta…';
+    (function step() {
+      grid(s.sx, s.sy, s.mx, s.my);
+      flights.slice(1).forEach(function (o) { drawPath(o, s.sx, s.sy, 1e9, '#5A5B62', 3); });
+      drawPath(f, s.sx, s.sy, i, '#E0402B', 5);
+      var p = f.pts[Math.min(i, n - 1)], q = f.pts[Math.min(i + 1, n - 1)];
+      rocket(80 + p[0] * s.sx, H - 70 - p[1] * s.sy, Math.atan2((q[1] - p[1]) * s.sy, (q[0] - p[0]) * s.sx || 0.001));
+      i = Math.round(n * (Date.now() - t0) / dur);
+      if (i < n) anim = setTimeout(step, 16); else { anim = null; done(f); idle(); }
+    })();
+  };
+
+  function done(f) {
+    $('sApo').textContent = Math.round(f.apo) + ' m';
+    $('sRange').textContent = Math.round(f.range) + ' m';
+    $('sTime').textContent = f.time.toFixed(1) + ' sn';
+    var v = $('verdict'), msg;
+    if (f.fins < 3) { v.className = 'verdict'; msg = '<b>Kararsız uçuş.</b> ' + (f.fins === 0 ? 'Kanatçık yok; ' : 'İki kanatçık yetmiyor; ') + 'basınç merkezi ağırlık merkezinin önünde kaldı, roket yalpaladı. En az 3 kanatçık dene.'; }
+    else if (f.fins >= 5) { v.className = 'verdict ok'; msg = '<b>Kararlı ama yavaş.</b> Fazla kanatçık sürtünmeyi artırdı. 3–4 kanatçıkla tepe noktası yükselir mi?'; }
+    else if (f.ang < 75) { v.className = 'verdict ok'; msg = '<b>Kararlı.</b> Açı düşük olduğu için roket yükselmek yerine uzağa gitti. Yarışmalarda genelde hedef irtifa ölçülür.'; }
+    else if (f.nose === 'duz') { v.className = 'verdict ok'; msg = '<b>Kararlı.</b> Düz burun havayı itiyor. Sivri burunla aynı uçuşu tekrarla ve farkı karşılaştır.'; }
+    else { v.className = 'verdict ok'; msg = '<b>Güzel uçuş.</b> Roket düz ve kararlı yükseldi. Şimdi yakıtı değiştir: yakıt iki katına çıkınca tepe noktası da iki katına çıkıyor mu?'; }
+    v.innerHTML = msg;
+    $('log').innerHTML = flights.map(function (x, k) {
+      return '<div><span' + (k ? ' class="muted"' : '') + '>' + x.fins + ' kanat · ' + x.fuel + ' g · ' + x.ang + '°</span><b>' + Math.round(x.apo) + ' m</b></div>';
+    }).join('');
+  }
+
+  labels(); idle();
+  document.fonts && document.fonts.ready.then(idle);
+</script>
+</body>
+</html>

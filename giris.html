@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Giriş — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .auth{display:grid;grid-template-columns:1fr 1fr;min-height:calc(100vh - 72px)}
+  .auth .art{background:var(--ink);color:var(--paper);padding:64px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden}
+  .auth .art .st{display:flex;align-items:flex-end;gap:0;margin-top:48px}
+  .auth .art .st i{flex:1;display:block}
+  .auth .form{padding:64px;display:flex;align-items:center;justify-content:center}
+  .auth form{width:100%;max-width:420px;display:flex;flex-direction:column;gap:18px}
+  .tabs{display:flex;background:var(--beige);border-radius:999px;padding:4px}
+  .tabs button{flex:1;height:44px;border-radius:999px;font-weight:600;color:var(--muted)}
+  .tabs button.on{background:var(--white);color:var(--ink)}
+  .lvl-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .lvl-pick button{height:44px;border-radius:14px;background:var(--white);border:1.5px solid var(--line);font-size:14px}
+  .lvl-pick button.on{border-color:var(--ink);background:var(--ink);color:#fff}
+  .err{color:var(--red);font-size:14px;min-height:20px}
+  @media (max-width:960px){.auth{grid-template-columns:1fr}.auth .art{display:none}.auth .form{padding:40px 20px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main class="auth">
+  <div class="art">
+    <div>
+      <span class="eyebrow">USTA</span>
+      <h1 style="font-size:clamp(44px,5vw,72px);margin-top:16px;color:var(--paper)">Her usta bir zamanlar çıraktı.</h1>
+      <p style="color:#B9B3A7;font-size:18px;margin-top:16px;max-width:440px">Ücretsiz hesabınla ilerlemen kaydedilir, sertifikalarında adın yazar, seviyen yükselir.</p>
+    </div>
+    <div class="st" aria-hidden="true"><i style="height:60px;background:var(--dark-2)"></i><i style="height:110px;background:var(--dark-3)"></i><i style="height:160px;background:#5A5B62"></i><i style="height:210px;background:var(--red)"></i></div>
+  </div>
+  <div class="form">
+    <form id="f" novalidate>
+      <div class="tabs" role="tablist"><button type="button" data-m="0">Giriş yap</button><button type="button" data-m="1">Hesap aç</button></div>
+      <h2 id="title" style="font-size:40px;margin-top:12px"></h2>
+      <div class="field" id="nameF"><label for="name">Ad soyad</label><input class="input" id="name" autocomplete="name" placeholder="Elif Yılmaz"></div>
+      <div class="field"><label for="email">E-posta</label><input class="input" id="email" type="email" autocomplete="email" placeholder="ornek@okul.k12.tr"></div>
+      <div class="field"><label for="pw">Şifre</label><input class="input" id="pw" type="password" autocomplete="current-password" placeholder="En az 6 karakter"></div>
+      <div id="gradeF"><label style="font-size:14px;font-weight:600;display:block;margin-bottom:8px">Kademe</label><div class="lvl-pick" id="grade"><button type="button" data-v="ortaokul">Ortaokul</button><button type="button" class="on" data-v="lise">Lise</button><button type="button" data-v="universite">Üniversite</button></div></div>
+      <p class="err" id="err" role="alert"></p>
+      <button class="btn btn-red btn-lg" type="submit" id="submit"></button>
+      <p class="muted" style="font-size:13px;text-align:center">Bu bir demodur: bilgiler yalnızca bu tarayıcıda tutulur, şifre hiçbir yere kaydedilmez. 18 yaş altı kullanıcılar için gerçek sürümde veli onayı istenir.</p>
+    </form>
+  </div>
+</main>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var mode = USTA.param('k') === '1' ? 1 : 0, grade = 'lise';
+  var $ = function (id) { return document.getElementById(id); };
+  if (USTA.user()) location.replace('panel.html');
+  function set(m) {
+    mode = m;
+    [].forEach.call(document.querySelectorAll('.tabs button'), function (b) { b.classList.toggle('on', +b.dataset.m === m); });
+    $('title').textContent = m ? 'İlk basamak.' : 'Tekrar hoş geldin.';
+    $('submit').textContent = m ? 'Ücretsiz hesap aç' : 'Giriş yap';
+    $('nameF').hidden = !m; $('gradeF').hidden = !m;
+    $('pw').autocomplete = m ? 'new-password' : 'current-password';
+    $('err').textContent = '';
+  }
+  document.querySelector('.tabs').onclick = function (e) { var b = e.target.closest('button'); if (b) set(+b.dataset.m); };
+  $('grade').onclick = function (e) {
+    var b = e.target.closest('button'); if (!b) return; grade = b.dataset.v;
+    [].forEach.call(this.children, function (c) { c.classList.toggle('on', c === b); });
+  };
+  $('f').onsubmit = function (e) {
+    e.preventDefault();
+    var name = $('name').value.trim(), email = $('email').value.trim(), pw = $('pw').value;
+    if (mode && name.length < 2) return ($('err').textContent = 'Adını yazar mısın?');
+    if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return ($('err').textContent = 'Geçerli bir e-posta gir.');
+    if (pw.length < 6) return ($('err').textContent = 'Şifre en az 6 karakter olmalı.');
+    if (!mode) {
+      var guess = email.split('@')[0].replace(/[._-]+/g, ' ').replace(/\d+/g, '').trim();
+      name = guess ? guess.split(' ').map(function (w) { return w.charAt(0).toLocaleUpperCase('tr') + w.slice(1); }).join(' ') : 'Öğrenci';
+    }
+    USTA.setUser({ name: name, email: email, grade: grade, since: new Date().toISOString().slice(0, 10) });
+    location.href = 'panel.html';
+  };
+  set(mode);
+</script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>USTA — Ulusal Sertifikalı Teknoloji Akademisi</title>
+<meta name="description" content="Merak eden her genç için Türkçe teknoloji dersleri, testler, sanal laboratuvar ve yapay zekâ koç. TEKNOFEST ve TÜBİTAK projelerine giden eksik basamak.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='2' y='22' width='6' height='8' fill='%23DCD6C9'/%3E%3Crect x='9' y='16' width='6' height='14' fill='%23A39E93'/%3E%3Crect x='16' y='10' width='6' height='20' fill='%2316171B'/%3E%3Crect x='23' y='3' width='6' height='27' fill='%23E0402B'/%3E%3C/svg%3E">
+<style>
+  .hero .row{display:flex;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+  .hero .exp{font-family:var(--serif);font-size:clamp(22px,2.6vw,34px);letter-spacing:-.01em;margin-top:8px}
+  .gap{display:grid;grid-template-columns:1fr 1.1fr 1fr;gap:16px;align-items:end;margin-top:48px}
+  .gap .b{border-radius:24px;padding:28px;min-height:180px;display:flex;flex-direction:column;justify-content:flex-end}
+  .gap .q{border:2.5px dashed var(--red);color:var(--red);min-height:240px;background:transparent}
+  .tech{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  .tech .card{display:flex;flex-direction:column;gap:10px;min-height:220px;transition:transform .2s}
+  .tech .card:hover{transform:translateY(-3px)}
+  .tech svg{width:44px;height:44px;color:var(--red)}
+  .demo{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center}
+  .levels{display:grid;grid-template-columns:repeat(4,1fr);gap:0;align-items:end}
+  .levels .lv{padding:28px;display:flex;flex-direction:column;gap:8px}
+  @media (max-width:960px){.tech{grid-template-columns:1fr 1fr}.demo{grid-template-columns:1fr}.demo .phones{justify-content:center}.levels{grid-template-columns:1fr 1fr}.gap{grid-template-columns:1fr}}
+  @media (max-width:600px){.tech{grid-template-columns:1fr}.levels{grid-template-columns:1fr}.levels .lv{min-height:auto!important}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <h1 class="serif">USTA</h1>
+    <div class="row">
+      <div>
+        <p class="exp">Ulusal Sertifikalı Teknoloji Akademisi</p>
+        <p class="sub">Merak ettiğin teknolojiyi Türkçe öğren, kendini sına, yapay zekâ koçla ilerle. Çıraklıktan ustalığa, TEKNOFEST’e ve kendi projene.</p>
+        <form class="search" action="dersler.html" role="search">
+          <label class="sr" for="q">Ders ara</label>
+          <input id="q" name="q" placeholder="Roket, İHA, yapay zekâ…" autocomplete="off">
+          <button class="btn btn-red" type="submit">Ara</button>
+        </form>
+      </div>
+      <div class="actions">
+        <a class="btn btn-ink btn-lg" href="giris.html?k=1">Ücretsiz başla</a>
+        <a class="btn btn-line btn-lg" href="dersler.html">Dersleri gez</a>
+      </div>
+    </div>
+    <div class="stair" aria-label="Çırak, Kalfa, Usta, Üstat seviyeleri">
+      <svg class="path" viewBox="0 0 1000 420" preserveAspectRatio="none" aria-hidden="true"><path d="M60 270 C 330 200, 640 110, 960 30" fill="none" stroke="#E0402B" stroke-width="2.5" stroke-dasharray="10 9" vector-effect="non-scaling-stroke"/></svg>
+      <a class="s s1" href="dersler.html?l=cirak"><b>Çırak</b><span>öğrenir</span></a>
+      <a class="s s2" href="dersler.html?l=kalfa"><b>Kalfa</b><span>dener</span></a>
+      <a class="s s3" href="dersler.html?l=usta"><b>Usta</b><span>üretir</span></a>
+      <a class="s s4" href="dersler.html?l=ustat"><b>Üstat</b><span>öğretir</span></a>
+      <div class="walker" style="left:18%;bottom:30%"></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <span class="eyebrow">Neden USTA?</span>
+    <h2 style="margin-top:14px;max-width:820px">Merak ile yarışma arasında bir basamak eksikti.</h2>
+    <div class="gap">
+      <div class="b" style="background:var(--beige)"><span class="tag" style="color:var(--muted)">1</span><h3 style="margin-top:8px">Merak</h3><p class="muted">“Roket yapmak istiyorum.”</p></div>
+      <div class="b q"><span class="tag">2 · USTA</span><h3 style="margin-top:8px">Öğrenme</h3><p>Ders, test, sanal deney ve koç. Hepsi tek yerde, Türkçe.</p></div>
+      <div class="b card-dark" style="min-height:300px"><span class="tag">3</span><h3 style="margin-top:8px">Yarışma ve destek</h3><p style="color:#B9B3A7">TEKNOFEST yarışmaları, TÜBİTAK projeleri.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="nasil" class="dark">
+  <div class="wrap">
+    <div class="head"><div><span class="eyebrow">Nasıl çalışır?</span><h2 style="margin-top:14px">Üç adım. Her gün biraz.</h2></div><p>Kısa dersler, yol gösteren testler ve cevabı vermeyen ama düşündüren bir koç.</p></div>
+    <div class="grid g3">
+      <div class="card" style="background:#1F2025;color:var(--paper)"><div class="step-n" style="background:var(--red)">1</div><h3 style="margin-top:22px">Öğren</h3><p class="muted" style="margin-top:8px">5–10 dakikalık Türkçe video dersler. Telefondan, okul çıkışı, otobüste.</p></div>
+      <div class="card" style="background:#1F2025;color:var(--paper)"><div class="step-n" style="background:var(--paper);color:var(--ink)">2</div><h3 style="margin-top:22px">Sına</h3><p class="muted" style="margin-top:8px">Testler not vermez, yol gösterir. Yanlışta ipucu, doğruda bir sonraki basamak.</p></div>
+      <div class="card" style="background:#1F2025;color:var(--paper)"><div class="step-n" style="background:var(--paper);color:var(--ink)">3</div><h3 style="margin-top:22px">Danış</h3><p class="muted" style="margin-top:8px">Yapay zekâ koç takıldığın yerde soru sorarak seni çözüme yaklaştırır.</p></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><div><span class="eyebrow">12 alan</span><h2 style="margin-top:14px">TEKNOFEST’in her alanına bir yol.</h2></div><p>Yarışma kartlarını 12 temada topladık. Sayılar, o temadaki yarışma kartı sayısıdır. Gruplama USTA’nındır, resmî sınıflandırma değildir.</p></div>
+    <div class="grid g4" id="areas"></div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="head"><div><span class="eyebrow">Video serileri</span><h2 style="margin-top:14px">Seviyene göre bir seri seç.</h2></div><p>Her alanda üç seri: hiç bilmeyen için Başlangıç, temeli olan için Orta, yarışmaya hazırlanan için İleri.</p></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px"><div class="tabs-lv" id="lvtabs"></div><a class="btn btn-line" href="akademi.html">Akademiye git</a></div>
+    <p class="muted" id="lvdesc" style="font-size:15px;margin:-8px 0 20px"></p>
+    <div class="grid g3" id="popular"></div>
+    <div class="grid g2" style="margin-top:28px">
+      <a class="card card-dark" href="doc.html" style="display:flex;gap:24px;align-items:center"><svg viewBox="0 0 64 64" width="72" height="72" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0;color:var(--red)"><rect x="6" y="6" width="52" height="52" rx="4"/><path d="M6 20H58M20 6V58" stroke-opacity=".35"/><path d="M30 46V28L40 18L50 28V46ZM30 40L24 46M50 40L56 46"/></svg><span><span class="tag">Doc</span><h3 style="color:#fff;margin-top:6px">Yazılı anlatım, şema ve kod</h3><p style="color:#B9B3A7;margin-top:6px">Teknik çizim tarzında şemalar, çalışan kod örnekleri, formüller.</p></span></a>
+      <a class="card" href="sinav.html" style="display:flex;gap:24px;align-items:center;background:var(--white)"><svg viewBox="0 0 64 64" width="72" height="72" fill="none" stroke="currentColor" stroke-width="2" style="flex-shrink:0"><rect x="10" y="6" width="44" height="52" rx="4"/><path d="M20 20H44M20 30H44M20 40H34"/><circle cx="46" cy="46" r="10" fill="var(--red)" stroke="var(--red)"/><path d="M41 46l3.5 3.5L51 43" stroke="#fff"/></svg><span><span class="tag">Alan sınavı · Demo</span><h3 style="margin-top:6px">Model Roket · Kalfa sınavı</h3><p class="muted" style="margin-top:6px">10 soru, 10 farklı soru türü: şema, hesap, kod, grafik.</p></span></a>
+    </div>
+  </div>
+</section>
+
+<section style="background:var(--white)">
+  <div class="wrap">
+    <div class="head"><div><span class="eyebrow">Yenilikçi teknolojiler</span><h2 style="margin-top:14px">Sadece video değil.</h2></div><p>Atölyesi olmayan okulda bile deney yapılabilsin, her öğrenci kendi hızında ilerlesin diye.</p></div>
+    <div class="tech">
+      <a class="card" style="background:var(--paper)" href="lab.html"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><rect x="4" y="8" width="40" height="26" rx="3"/><path d="M16 42H32M10 28Q24 4 38 22"/></svg><h3>Sanal laboratuvar</h3><p class="muted">Roketini önce bilgisayarda uçur, sonra yap.</p><span class="tag" style="margin-top:auto">Hemen dene →</span></a>
+      <div class="card" style="background:var(--paper)"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"><path d="M24 6L40 15V33L24 42L8 33V15ZM8 15L24 24L40 15M24 24V42"/></svg><h3>Artırılmış gerçeklik</h3><p class="muted">Motoru telefon kamerasıyla masanda incele, parçalarına ayır.</p><span class="badge" style="margin-top:auto;align-self:flex-start">Mobil uygulamada</span></div>
+      <a class="card card-dark" href="koc.html"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 10H40V32H22L14 40V32H8Z"/></svg><h3>Yapay zekâ koç</h3><p style="color:#B9B3A7">Cevabı vermez, soru sorarak öğretir.</p><span class="tag" style="margin-top:auto">Koçla konuş →</span></a>
+      <div class="card" style="background:var(--paper)"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M8 14H40M8 24H40M8 34H40"/><circle cx="18" cy="14" r="4" fill="#F6F3EC"/><circle cx="31" cy="24" r="4" fill="#F6F3EC"/><circle cx="22" cy="34" r="4" fill="#F6F3EC"/></svg><h3>Uyarlanabilir dersler</h3><p class="muted">Zorluk, öğrencinin hızına göre kendini ayarlar.</p></div>
+      <a class="card" style="background:var(--paper)" href="yarismalar.html"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="16" cy="17" r="6"/><circle cx="32" cy="17" r="6"/><path d="M5 40C5 29 27 29 27 40M21 40C21 29 43 29 43 40"/></svg><h3>Akıllı takım eşleştirme</h3><p class="muted">Eksik yeteneğini tamamlayan takım arkadaşını bulur.</p><span class="tag" style="margin-top:auto">Takım bul →</span></a>
+      <a class="card" style="background:var(--paper)" href="sertifika.html"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6"><rect x="7" y="7" width="13" height="13"/><rect x="28" y="7" width="13" height="13"/><rect x="7" y="28" width="13" height="13"/><rect x="28" y="28" width="5" height="5" fill="currentColor"/><rect x="36" y="36" width="5" height="5" fill="currentColor"/></svg><h3>Dijital sertifika</h3><p class="muted">QR kodla saniyede doğrulanan belge.</p><span class="tag" style="margin-top:auto">Doğrula →</span></a>
+    </div>
+  </div>
+</section>
+
+<section id="seviyeler">
+  <div class="wrap">
+    <div class="head"><div><span class="eyebrow">Seviyeler</span><h2 style="margin-top:14px">Dört basamak.</h2></div><p>Her seviye bir sertifikayla tamamlanır. Üstatlar yeni çırakları yetiştirir; akademi kendi ustalarını büyütür.</p></div>
+    <div class="levels">
+      <div class="lv" style="background:var(--beige);min-height:220px"><span class="tag" style="color:var(--muted)">1</span><h3>Çırak öğrenir</h3><p class="muted" style="font-size:15px">Temel kavramlar, kısa videolar, ilk deneyler.</p></div>
+      <div class="lv" style="background:var(--line);min-height:290px"><span class="tag" style="color:var(--muted)">2</span><h3>Kalfa dener</h3><p class="muted" style="font-size:15px">Uygulamalı projeler, sanal laboratuvar.</p></div>
+      <div class="lv card-dark" style="min-height:360px"><span class="tag">3</span><h3>Usta üretir</h3><p style="font-size:15px;color:#B9B3A7">Takım projesi, TEKNOFEST başvurusu.</p></div>
+      <div class="lv redbg" style="min-height:430px"><span class="tag" style="color:var(--red-3)">4</span><h3>Üstat öğretir</h3><p style="font-size:15px;color:#FFE3DC">Mentorluk ve içerik üretimi.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap demo">
+    <div>
+      <span class="eyebrow">Cebindeki akademi</span>
+      <h2 style="margin-top:14px">Bir telefon yeterli.</h2>
+      <p class="muted" style="margin-top:18px;font-size:19px;max-width:480px">Atölye büyük şehirde olabilir, ama ders herkesin cebinde. Kaldığın yerden devam et, testi çöz, takıldığında koça sor.</p>
+      <p class="quote" style="margin-top:28px;max-width:520px">Diğer platformlar ders verir. USTA, yarışmaya ve projeye taşır.</p>
+    </div>
+    <div class="phones" style="display:flex;gap:20px">
+      <div class="phone"><div class="screen">
+        <p style="font-size:14px;color:var(--muted-2)">Merhaba <span data-username>Elif</span></p>
+        <p class="serif" style="font-size:26px;line-height:1.1;margin-top:4px">Kaldığın yerden devam et</p>
+        <div class="card-dark" style="border-radius:20px;padding:18px;margin-top:20px"><p style="font-size:13px;color:#B9B3A7">Uzay ve Roket</p><p style="font-weight:600;margin-top:2px">Roket nasıl uçar?</p><div class="bar" style="margin-top:14px"><i style="width:66%"></i></div><p style="font-size:13px;color:#B9B3A7;margin-top:8px">4 / 6 ders</p></div>
+        <div style="background:var(--paper);border-radius:20px;padding:16px;margin-top:12px"><p style="font-size:13px;color:var(--muted-2)">Sıradaki</p><p style="font-weight:600">Mini test</p></div>
+        <a href="koc.html" class="btn btn-red" style="margin-top:auto">Koça sor</a>
+      </div></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" style="position:relative;overflow:hidden">
+  <div class="wrap">
+    <h2 style="font-size:clamp(48px,8vw,104px)">Çıraklar hazır.<br><span style="color:var(--red)">Sıra sende.</span></h2>
+    <div style="display:flex;gap:12px;margin-top:36px;flex-wrap:wrap"><a class="btn btn-red btn-lg" href="giris.html?k=1">Ücretsiz başla</a><a class="btn btn-lg" style="border:1.5px solid #4A4B53;color:var(--paper)" href="dersler.html">Dersleri gez</a></div>
+  </div>
+  <div style="position:absolute;right:24px;bottom:0;display:flex;align-items:flex-end" aria-hidden="true"><i style="width:70px;height:40px;background:#2E2F35"></i><i style="width:70px;height:80px;background:#3A3B42"></i><i style="width:70px;height:120px;background:#4A4B53"></i><i style="width:70px;height:160px;background:var(--red)"></i></div>
+</section>
+</main>
+
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/series.js"></script>
+<script>
+  document.getElementById('areas').innerHTML = USTA.areas.map(function (a) {
+    return '<a class="tile" href="dersler.html?a=' + a.id + '">' + USTA.icon(a.icon, 'ic') + '<b style="margin-top:auto;font-size:17px">' + a.name + '</b><span class="muted" style="font-size:14px">' + a.cards + ' yarışma kartı</span></a>';
+  }).join('');
+  (function () {
+    var PICK = { cirak: ['uzay', 'yapayzeka', 'robotik'], kalfa: ['uzay', 'havacilik', 'enerji'], usta: ['uzay', 'yapayzeka', 'havacilik'] }, cur = 'cirak';
+    function draw() {
+      document.getElementById('lvtabs').innerHTML = USTA.tiers.map(function (t) { return '<button class="' + (t.id === cur ? 'on' : '') + '" data-t="' + t.id + '">' + t.name + ' <small>' + t.level + '</small></button>'; }).join('');
+      document.getElementById('lvdesc').textContent = USTA.tierById(cur).desc;
+      document.getElementById('popular').innerHTML = PICK[cur].map(function (a) { return USTA.seriesCard(USTA.seriesById(a + '-' + cur), { showArea: true }); }).join('');
+    }
+    document.getElementById('lvtabs').onclick = function (e) { var b = e.target.closest('[data-t]'); if (b) { cur = b.dataset.t; draw(); } };
+    draw();
+  })();
+  var u = USTA.user(); if (u) document.querySelectorAll('[data-username]').forEach(function (e) { e.textContent = u.name.split(' ')[0]; });
+</script>
+</body>
+</html>

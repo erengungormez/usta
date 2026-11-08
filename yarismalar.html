@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yarışmalar — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .facts{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+  .facts .card b{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(44px,6vw,80px);letter-spacing:-.03em;line-height:1}
+  .facts .card span{color:var(--muted);font-size:15px}
+  .area{display:flex;flex-direction:column;gap:14px;min-height:220px}
+  .area .ic{width:56px;height:56px;border-radius:16px;background:var(--paper);display:flex;align-items:center;justify-content:center}
+  .area .ic svg{width:32px;height:32px}
+  .area .n{font-family:var(--serif);font-size:40px;font-weight:500;letter-spacing:-.02em;line-height:1}
+  .area .links{margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:14px}
+  .area .links a{color:var(--red)}
+  .area .links a:hover{text-decoration:underline}
+  .bars{display:flex;flex-direction:column;gap:8px;margin-top:40px}
+  .bars div{display:grid;grid-template-columns:150px 1fr 32px;gap:14px;align-items:center;font-size:14px}
+  .bars i{display:block;height:14px;border-radius:7px;background:var(--dark-3)}
+  .bars div:first-child i{background:var(--red)}
+  .mate{display:flex;gap:16px;align-items:center}
+  .mate .av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:600;font-size:18px;flex-shrink:0}
+  @media (max-width:960px){.facts{grid-template-columns:1fr}.bars div{grid-template-columns:110px 1fr 28px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:56px">
+  <div class="wrap">
+    <span class="eyebrow">Yarışmalar</span>
+    <h1 style="margin-top:12px;font-size:clamp(44px,6vw,84px);max-width:900px">Her yarışmanın bir basamağı var.</h1>
+    <p class="muted" style="font-size:19px;max-width:640px;margin-top:14px">USTA, TEKNOFEST yarışmalarına hazırlayan dersleri alanlara göre toplar. Alanını seç, sana uygun dersle başla, takımını kur.</p>
+    <div class="facts">
+      <div class="card"><b>61</b><span>yarışma kartı · TEKNOFEST 2026</span></div>
+      <div class="card"><b>12</b><span>alan · USTA gruplaması</span></div>
+      <div class="card"><b style="font-size:clamp(34px,4vw,52px)">30 Eyl – 4 Eki</b><span>Şanlıurfa GAP Havalimanı</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark" style="margin-top:72px">
+  <div class="wrap">
+    <div class="head"><h2>Kart sayısına göre alanlar</h2><p>61 yarışma kartını USTA 12 alanda topladı. Bu gruplama USTA’nındır; resmî bir sınıflandırma değildir.</p></div>
+    <div class="bars" id="bars"></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="head"><h2>Alanını seç</h2><p>Her alanın altında o yarışmalara hazırlayan USTA dersleri var.</p></div>
+    <div class="grid g4" id="areas"></div>
+  </div>
+</section>
+
+<section style="background:var(--white)">
+  <div class="wrap">
+    <div class="grid g2" style="gap:56px;align-items:start">
+      <div>
+        <span class="eyebrow">Akıllı takım eşleştirme</span>
+        <h2 style="margin-top:12px">Eksik yeteneği tamamlayan arkadaşı bul.</h2>
+        <p class="muted" style="font-size:18px;margin-top:16px">Sen neyi iyi yapıyorsun? Platform, takımına en çok katkı verecek yeteneklere sahip öğrencileri önerir.</p>
+        <p style="font-weight:600;margin-top:28px">Benim güçlü yanım</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px" id="skills"></div>
+        <p style="font-weight:600;margin-top:24px">Alan</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px" id="mArea"></div>
+        <p class="muted" style="font-size:13px;margin-top:28px">Profiller temsilîdir. Gerçek sürümde eşleştirme yalnızca veli onayı ve öğretmen gözetimiyle, kişisel bilgi paylaşmadan yapılır.</p>
+      </div>
+      <div id="mates" style="display:flex;flex-direction:column;gap:12px"></div>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap" style="text-align:center">
+    <h2 style="font-size:clamp(40px,6vw,76px)">Yarışmaya bir basamak kaldı.</h2>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px"><a class="btn btn-red btn-lg" href="dersler.html">Derslere başla</a><a class="btn btn-lg" style="color:var(--paper);border:1.5px solid var(--dark-3)" href="koc.html">Koça danış</a></div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var areas = USTA.areas.slice().sort(function (a, b) { return b.cards - a.cards; }), max = areas[0].cards;
+  document.getElementById('bars').innerHTML = areas.map(function (a) {
+    return '<div><span>' + a.name + '</span><i style="width:' + (100 * a.cards / max) + '%"></i><b>' + a.cards + '</b></div>';
+  }).join('');
+  document.getElementById('areas').innerHTML = areas.map(function (a) {
+    var cs = USTA.courses.filter(function (c) { return c.area === a.id; });
+    return '<div class="card area"><div style="display:flex;justify-content:space-between;align-items:flex-start"><span class="ic">' + USTA.icon(a.icon) + '</span><span style="text-align:right"><span class="n">' + a.cards + '</span><span class="muted" style="display:block;font-size:12px">kart</span></span></div>' +
+      '<h3 style="font-size:24px">' + a.name + '</h3><div class="links">' +
+      (cs.length ? cs.map(function (c) { return '<a href="ders.html?id=' + c.id + '">' + USTA.esc(c.title) + ' →</a>'; }).join('') : '<span class="muted">Dersler hazırlanıyor</span>') +
+      '<a href="dersler.html?a=' + a.id + '" class="muted" style="color:var(--muted)">Tüm ' + a.name.toLocaleLowerCase('tr') + ' dersleri</a></div></div>';
+  }).join('');
+
+  /* Takım eşleştirme (temsilî) */
+  var skills = [{ id: 'tasarim', n: 'Mekanik tasarım' }, { id: 'yazilim', n: 'Yazılım' }, { id: 'elektronik', n: 'Elektronik' }, { id: 'sunum', n: 'Sunum ve rapor' }];
+  var people = [
+    { n: 'Zeynep K.', city: 'Kayseri', lv: 'kalfa', s: ['yazilim', 'elektronik'], a: ['havacilik', 'robotik', 'uzay'] },
+    { n: 'Mert A.', city: 'İzmir', lv: 'usta', s: ['tasarim'], a: ['uzay', 'havacilik', 'deniz'] },
+    { n: 'Ayşe D.', city: 'Van', lv: 'cirak', s: ['sunum', 'tasarim'], a: ['egitim', 'saglik', 'enerji'] },
+    { n: 'Yusuf T.', city: 'Şanlıurfa', lv: 'kalfa', s: ['elektronik'], a: ['enerji', 'ulasim', 'robotik'] },
+    { n: 'Elif S.', city: 'Trabzon', lv: 'usta', s: ['yazilim'], a: ['yapayzeka', 'haberlesme', 'savunma'] },
+    { n: 'Can B.', city: 'Ankara', lv: 'kalfa', s: ['sunum', 'yazilim'], a: ['yazilim', 'yapayzeka', 'egitim'] },
+    { n: 'Defne Ö.', city: 'Erzurum', lv: 'cirak', s: ['tasarim', 'elektronik'], a: ['deniz', 'uzay', 'savunma'] },
+    { n: 'Emir Y.', city: 'Diyarbakır', lv: 'kalfa', s: ['elektronik', 'tasarim'], a: ['havacilik', 'savunma', 'ulasim'] }
+  ];
+  var sel = { s: 'tasarim', a: 'uzay' };
+  function chipRow(id, items, key) {
+    var el = document.getElementById(id);
+    el.innerHTML = items.map(function (i) { return '<button class="chip' + (sel[key] === i.id ? ' on' : '') + '" data-v="' + i.id + '" style="background:' + (sel[key] === i.id ? '' : 'var(--paper)') + '">' + i.name + '</button>'; }).join('');
+    el.onclick = function (e) { var b = e.target.closest('.chip'); if (!b) return; sel[key] = b.dataset.v; render(); };
+  }
+  function render() {
+    chipRow('skills', skills.map(function (s) { return { id: s.id, name: s.n }; }), 's');
+    chipRow('mArea', USTA.areas, 'a');
+    var ranked = people.map(function (p) {
+      var comp = p.s.filter(function (x) { return x !== sel.s; }).length * 2 - (p.s.indexOf(sel.s) >= 0 ? 1 : 0);
+      var fit = p.a.indexOf(sel.a) >= 0 ? 3 : 0;
+      return { p: p, score: comp + fit };
+    }).sort(function (a, b) { return b.score - a.score; }).slice(0, 4);
+    var top = ranked[0].score || 1;
+    document.getElementById('mates').innerHTML = ranked.map(function (r, k) {
+      var p = r.p, pct = Math.max(52, Math.min(96, Math.round(60 + 36 * r.score / top) - k * 4)), adds = p.s.filter(function (x) { return x !== sel.s; });
+      var bg = ['var(--red)', 'var(--ink)', 'var(--beige)', 'var(--line)'][k], fg = k < 2 ? '#fff' : 'var(--ink)';
+      return '<div class="card mate" style="background:var(--paper)"><span class="av" style="background:' + bg + ';color:' + fg + '">' + p.n[0] + '</span><span style="flex:1"><b style="display:block;font-weight:600">' + p.n + ' <span class="muted" style="font-weight:400;font-size:14px">· ' + p.city + ' · ' + USTA.levelById(p.lv).name + '</span></b><span class="muted" style="font-size:14px">' +
+        (adds.length ? 'Takıma katar: ' + adds.map(function (x) { return skills.filter(function (s) { return s.id === x; })[0].n.toLocaleLowerCase('tr'); }).join(', ') : 'Aynı alanda güçlü, yükü paylaşır') + '</span></span><span style="text-align:right"><b class="serif" style="font-size:28px">%' + pct + '</b><span class="muted" style="display:block;font-size:12px">uyum</span></span></div>';
+    }).join('') + '<button class="btn btn-ink" style="align-self:flex-start;margin-top:8px" onclick="USTA.toast(\'Davet öğretmen onayına gönderildi (demo).\')">Takıma davet et</button>';
+  }
+  render();
+</script>
+</body>
+</html>

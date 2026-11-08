@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dersler — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .filters{display:flex;flex-direction:column;gap:14px;margin:36px 0 32px}
+  .chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .empty{text-align:center;padding:80px 0;color:var(--muted)}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:56px">
+  <div class="wrap">
+    <span class="eyebrow">Ders kataloğu</span>
+    <h1 style="margin-top:12px;font-size:clamp(44px,6vw,76px)">Ne öğrenmek istersin?</h1>
+    <div class="filters">
+      <div class="search" style="margin-top:0;max-width:none">
+        <label class="sr" for="q">Ders ara</label>
+        <input id="q" placeholder="Ders, alan ya da konu ara…" autocomplete="off">
+        <span class="muted" id="count" style="padding:0 18px;font-size:14px;white-space:nowrap"></span>
+      </div>
+      <div class="chips" id="levelChips" role="group" aria-label="Seviye"></div>
+      <div class="chips" id="areaChips" role="group" aria-label="Alan"></div>
+    </div>
+    <div class="grid g3" id="list"></div>
+    <div class="empty" id="empty" hidden>
+      <p class="serif" style="font-size:32px;color:var(--ink)">Bu basamakta henüz ders yok.</p>
+      <p style="margin-top:8px">Üstat seviyesindeki dersleri ustalar hazırlıyor. Başka bir filtre dene ya da <a href="koc.html" style="color:var(--red)">koça sor</a>.</p>
+    </div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var f = { q: USTA.param('q') || '', a: USTA.param('a') || '', l: USTA.param('l') || '' };
+  var q = document.getElementById('q'); q.value = f.q;
+
+  function chips(el, items, key) {
+    el.innerHTML = '<button class="chip' + (f[key] ? '' : ' on') + '" data-v="">Tümü</button>' +
+      items.map(function (i) { return '<button class="chip' + (f[key] === i.id ? ' on' : '') + '" data-v="' + i.id + '">' + i.name + '</button>'; }).join('');
+    el.onclick = function (e) {
+      var b = e.target.closest('.chip'); if (!b) return;
+      f[key] = b.dataset.v; render();
+    };
+  }
+  function norm(s) { return s.toLocaleLowerCase('tr'); }
+  function render() {
+    chips(document.getElementById('levelChips'), USTA.levels, 'l');
+    chips(document.getElementById('areaChips'), USTA.areas, 'a');
+    var term = norm(f.q.trim());
+    var list = USTA.courses.filter(function (c) {
+      var a = USTA.areaById(c.area);
+      if (f.a && c.area !== f.a) return false;
+      if (f.l && c.level !== f.l) return false;
+      if (term) {
+        var hay = norm(c.title + ' ' + c.summary + ' ' + a.name + ' ' + c.lessons.map(function (x) { return x.t; }).join(' '));
+        return hay.indexOf(term) >= 0 || (term === 'iha' && hay.indexOf('i̇ha') >= 0);
+      }
+      return true;
+    });
+    document.getElementById('list').innerHTML = list.map(USTA.courseCard).join('');
+    document.getElementById('empty').hidden = list.length > 0;
+    document.getElementById('count').textContent = list.length + ' ders';
+    var p = new URLSearchParams(); if (f.q) p.set('q', f.q); if (f.a) p.set('a', f.a); if (f.l) p.set('l', f.l);
+    history.replaceState(null, '', location.pathname + (p.toString() ? '?' + p : ''));
+  }
+  q.addEventListener('input', function () { f.q = q.value; render(); });
+  render();
+</script>
+</body>
+</html>

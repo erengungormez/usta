@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Panelim — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .lvl{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;align-items:end;height:260px;margin-top:40px}
+  .lvl div{border-radius:18px 18px 0 0;padding:18px;display:flex;flex-direction:column;justify-content:flex-end;position:relative}
+  .lvl div b{font-family:var(--serif);font-weight:500;font-size:clamp(20px,2.4vw,30px);letter-spacing:-.02em}
+  .lvl div span{font-size:13px;opacity:.75}
+  .lvl .you{position:absolute;top:-34px;left:18px;background:var(--red);color:#fff;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:600;opacity:1}
+  .row-c{display:flex;gap:18px;align-items:center;padding:18px 0;border-top:1px solid var(--line)}
+  .row-c .ic{width:52px;height:52px;border-radius:14px;background:var(--paper);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .row-c .ic svg{width:30px;height:30px}
+  .kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .kpis .card b{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(40px,5vw,64px);letter-spacing:-.03em;line-height:1}
+  .kpis .card span{color:var(--muted);font-size:14px}
+  @media (max-width:600px){.kpis{grid-template-columns:1fr}.lvl{height:200px}.lvl div{padding:12px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:56px">
+  <div class="wrap" id="app"></div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var app = document.getElementById('app'), u = USTA.user();
+  if (!u) {
+    app.innerHTML = '<div style="max-width:640px;margin:40px auto;text-align:center"><span class="eyebrow">Panelim</span><h1 style="margin-top:12px;font-size:clamp(44px,6vw,72px)">Önce bir basamak: giriş yap.</h1><p class="muted" style="font-size:19px;margin-top:16px">Panelinde ilerlemen, sertifikaların ve seviyen bir arada durur.</p><div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px"><a class="btn btn-red btn-lg" href="giris.html?k=1">Ücretsiz hesap aç</a><a class="btn btn-line btn-lg" href="giris.html">Giriş yap</a></div></div>';
+  } else {
+    var L = USTA.userLevel(), next = [1, 3, 6][L.idx], certs = USTA.state.certs;
+    var started = USTA.courses.filter(function (c) { var p = USTA.courseProgress(c); return p > 0; })
+      .sort(function (a, b) { return USTA.courseProgress(a) - USTA.courseProgress(b); });
+    var lessonsDone = USTA.courses.reduce(function (s, c) { return s + USTA.doneLessons(c.id).length; }, 0);
+    var heights = [34, 56, 78, 100], colors = [['var(--beige)', 'var(--ink)'], ['var(--line)', 'var(--ink)'], ['var(--ink)', 'var(--paper)'], ['var(--red)', '#fff']];
+    var suggest = USTA.courses.filter(function (c) { return USTA.courseProgress(c) === 0 && !certs.some(function (x) { return x.cid === c.id; }); })
+      .filter(function (c) { return c.level === (L.idx === 0 ? 'cirak' : L.idx === 1 ? 'kalfa' : 'usta'); }).slice(0, 3);
+    if (suggest.length < 3) suggest = suggest.concat(USTA.courses.filter(function (c) { return USTA.courseProgress(c) === 0 && suggest.indexOf(c) < 0; }).slice(0, 3 - suggest.length));
+
+    app.innerHTML =
+      '<div style="display:flex;justify-content:space-between;align-items:flex-end;gap:20px;flex-wrap:wrap">' +
+        '<div><span class="eyebrow">Panelim</span><h1 style="margin-top:12px;font-size:clamp(44px,6vw,76px)">Merhaba, ' + USTA.esc(u.name.split(' ')[0]) + '.</h1></div>' +
+        '<button class="btn btn-ghost btn-sm" id="out">Çıkış yap</button>' +
+      '</div>' +
+      '<p class="muted" style="font-size:19px;margin-top:10px">' + (L.idx < 3 ? 'Şu an <b style="color:var(--ink)">' + L.level.name + '</b> basamağındasın. ' + USTA.levels[L.idx + 1].name + ' olmak için ' + (next - L.certs) + ' sertifika daha.' : 'Üstat oldun. Artık başkalarına yol gösterme sırası sende.') + '</p>' +
+      '<div class="lvl">' + USTA.levels.map(function (lv, k) {
+        return '<div style="height:' + heights[k] + '%;background:' + colors[k][0] + ';color:' + colors[k][1] + (k > L.idx ? ';opacity:.45' : '') + '">' + (k === L.idx ? '<span class="you">Sen buradasın</span>' : '') + '<b>' + lv.name + '</b><span>' + lv.verb + '</span></div>';
+      }).join('') + '</div>' +
+
+      '<div class="kpis" style="margin-top:40px">' +
+        '<div class="card"><b>' + lessonsDone + '</b><span>tamamlanan ders</span></div>' +
+        '<div class="card"><b>' + certs.length + '</b><span>sertifika</span></div>' +
+        '<div class="card"><b>' + Object.keys(USTA.state.quiz).length + '</b><span>çözülen seviye testi</span></div>' +
+      '</div>' +
+
+      '<div class="grid g2" style="margin-top:40px;align-items:start">' +
+        '<div class="card"><h3>Devam eden dersler</h3>' +
+          (started.length ? started.map(function (c) {
+            var p = USTA.courseProgress(c), a = USTA.areaById(c.area);
+            return '<a class="row-c" href="ders.html?id=' + c.id + '"><span class="ic">' + USTA.icon(a.icon) + '</span><span style="flex:1;min-width:0"><b style="display:block;font-weight:600">' + USTA.esc(c.title) + '</b><span class="bar" style="margin-top:8px;display:block"><i style="width:' + p + '%"></i></span></span><span class="muted" style="font-size:14px">%' + p + '</span></a>';
+          }).join('') : '<p class="muted" style="margin-top:12px">Henüz başladığın bir ders yok.</p><a class="btn btn-ink" href="dersler.html" style="margin-top:16px">Derslere göz at</a>') +
+        '</div>' +
+        '<div class="card"><h3>Sertifikalarım</h3>' +
+          (certs.length ? certs.map(function (c) {
+            var co = USTA.courseById(c.cid);
+            return '<a class="row-c" href="sertifika.html?kod=' + c.code + '"><span style="color:var(--ink);flex-shrink:0">' + USTA.qr(c.code, 52) + '</span><span style="flex:1"><b style="display:block;font-weight:600">' + USTA.esc(co.title) + '</b><span class="muted" style="font-size:13px">' + USTA.levelById(co.level).name + ' · ' + c.code + '</span></span><span class="muted">→</span></a>';
+          }).join('') : '<p class="muted" style="margin-top:12px">Bir dersi bitirip seviye testinden %60 aldığında sertifikan burada görünür.</p>') +
+        '</div>' +
+      '</div>' +
+
+      '<div class="head" style="margin-top:72px;margin-bottom:24px"><h2 style="font-size:clamp(32px,4vw,48px)">Sıradaki basamak için</h2></div>' +
+      '<div class="grid g3">' + suggest.map(USTA.courseCard).join('') + '</div>' +
+
+      '<div class="card card-dark" style="margin-top:40px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><div><h3>Takılırsan koç burada.</h3><p style="color:#B9B3A7;margin-top:6px">Cevabı vermez; doğru soruyu sorar.</p></div><a class="btn btn-red" href="koc.html">Koçla konuş</a></div>';
+
+    document.getElementById('out').onclick = function () { USTA.logout(); location.href = 'index.html'; };
+  }
+</script>
+</body>
+</html>

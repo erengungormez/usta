@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ders — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .layout{display:grid;grid-template-columns:1fr 380px;gap:32px;align-items:start}
+  .player{position:relative;aspect-ratio:16/9;background:var(--ink);border-radius:24px;overflow:hidden;color:var(--white)}
+  .player .screen{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:8%}
+  .player .big{font-family:var(--serif);font-size:clamp(26px,3.6vw,48px);line-height:1.1;letter-spacing:-.02em;max-width:80%}
+  .player .play{position:absolute;inset:0;margin:auto;width:88px;height:88px;border-radius:50%;background:var(--red);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+  .player .play:hover{transform:scale(1.06)}
+  .player .ctrl{position:absolute;left:0;right:0;bottom:0;padding:18px 24px;display:flex;align-items:center;gap:16px;background:linear-gradient(transparent,rgba(0,0,0,.6));font-size:14px}
+  .player .track{flex:1;height:5px;border-radius:3px;background:rgba(255,255,255,.2);overflow:hidden}
+  .player .track i{display:block;height:100%;width:0;background:var(--red)}
+  .player .stairs{position:absolute;right:6%;bottom:18%;display:flex;align-items:flex-end;gap:0;opacity:.9}
+  .player .stairs i{width:36px;background:var(--dark-3)}
+  .lessons{position:sticky;top:96px}
+  .lesson{display:flex;gap:14px;align-items:center;padding:14px 4px;border-top:1px solid var(--line);cursor:pointer;width:100%;text-align:left}
+  .lesson:hover b{color:var(--red)}
+  .lesson .dot{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;color:var(--muted)}
+  .lesson.done .dot{background:var(--ink);border-color:var(--ink);color:var(--white)}
+  .lesson.cur{background:var(--white);border-radius:14px;border-color:transparent;padding:14px}
+  .lesson.cur .dot{border-color:var(--red);color:var(--red)}
+  .lesson.cur + .lesson{border-color:transparent}
+  .reading{font-size:19px;line-height:1.7;max-width:720px}
+  .crumbs{font-size:14px;color:var(--muted);display:flex;gap:8px;flex-wrap:wrap}
+  .crumbs a:hover{color:var(--ink)}
+  @media (max-width:960px){.layout{grid-template-columns:1fr}.lessons{position:static}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main>
+<section style="padding-top:40px">
+  <div class="wrap">
+    <div class="crumbs" id="crumbs"></div>
+    <div class="layout" style="margin-top:20px">
+      <div>
+        <div class="player" id="player">
+          <div class="screen"><span class="tag" id="pTag" style="color:var(--red-3)"></span><p class="big" id="pTitle"></p></div>
+          <div class="stairs" aria-hidden="true"><i style="height:24px"></i><i style="height:48px"></i><i style="height:72px"></i><i style="height:96px;background:var(--red)"></i></div>
+          <button class="play" id="play" aria-label="Dersi oynat"><svg width="32" height="32" viewBox="0 0 32 32"><path d="M11 7l15 9-15 9Z" fill="#fff"/></svg></button>
+          <div class="ctrl"><span id="tNow">0:00</span><div class="track"><i id="track"></i></div><span id="tAll"></span><span class="badge" style="background:rgba(255,255,255,.12);color:#fff">Altyazı TR</span></div>
+        </div>
+        <div style="margin-top:32px">
+          <span class="eyebrow" id="lNum"></span>
+          <h1 id="lTitle" style="font-size:clamp(34px,4.4vw,52px);margin-top:10px"></h1>
+          <p class="reading" id="lBody" style="margin-top:20px"></p>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:32px">
+            <button class="btn btn-ink" id="complete">Dersi tamamladım</button>
+            <a class="btn btn-line" id="askCoach" href="koc.html">Bu dersi koça sor</a>
+            <a class="btn btn-ghost" id="labLink" href="lab.html" hidden>Sanal laboratuvarda dene →</a>
+          </div>
+          <p class="muted" style="font-size:13px;margin-top:28px">Video ve ders metni temsilîdir.</p>
+        </div>
+      </div>
+      <aside class="lessons">
+        <div class="card">
+          <span class="tag" id="cArea"></span>
+          <h3 id="cTitle" style="margin-top:8px"></h3>
+          <p class="muted" id="cSum" style="font-size:15px;margin-top:8px"></p>
+          <div style="display:flex;justify-content:space-between;font-size:14px;margin-top:20px"><span class="muted">İlerleme</span><b id="cPct"></b></div>
+          <div class="bar" style="margin-top:8px"><i id="cBar"></i></div>
+          <div id="lessonList" style="margin-top:20px"></div>
+          <a class="btn btn-red" id="testBtn" style="width:100%;margin-top:20px">Seviye testine geç</a>
+          <p class="muted" id="testNote" style="font-size:13px;text-align:center;margin-top:10px"></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+</section>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var c = USTA.courseById(USTA.param('id')) || USTA.courses[0];
+  var a = USTA.areaById(c.area), lv = USTA.levelById(c.level);
+  var cur = parseInt(USTA.param('l') || '0', 10);
+  if (isNaN(cur) || cur < 0 || cur >= c.lessons.length) {
+    var done = USTA.doneLessons(c.id); cur = 0;
+    while (done.indexOf(cur) >= 0 && cur < c.lessons.length - 1) cur++;
+  }
+  document.title = c.title + ' — USTA';
+  document.getElementById('crumbs').innerHTML = '<a href="dersler.html">Dersler</a><span>/</span><a href="dersler.html?a=' + a.id + '">' + a.name + '</a><span>/</span><span style="color:var(--ink)">' + USTA.esc(c.title) + '</span>';
+  document.getElementById('cArea').textContent = a.name + ' · ' + lv.name;
+  document.getElementById('cTitle').textContent = c.title;
+  document.getElementById('cSum').textContent = c.summary;
+  document.getElementById('testBtn').href = 'test.html?id=' + c.id;
+  document.getElementById('askCoach').href = 'koc.html?id=' + c.id;
+  if (c.lab) document.getElementById('labLink').hidden = false;
+
+  var timer = null, t = 0;
+  function fmt(s) { return Math.floor(s / 60) + ':' + ('0' + Math.floor(s % 60)).slice(-2); }
+  function stop() { clearInterval(timer); timer = null; document.getElementById('play').style.display = ''; }
+
+  function render() {
+    var L = c.lessons[cur], done = USTA.doneLessons(c.id), p = USTA.courseProgress(c);
+    stop(); t = 0;
+    document.getElementById('track').style.width = '0';
+    document.getElementById('tNow').textContent = '0:00';
+    document.getElementById('tAll').textContent = L.d + ':00';
+    document.getElementById('pTag').textContent = 'Ders ' + (cur + 1) + ' / ' + c.lessons.length;
+    document.getElementById('pTitle').textContent = L.t;
+    document.getElementById('lNum').textContent = 'Ders ' + (cur + 1) + ' · ' + L.d + ' dk';
+    document.getElementById('lTitle').textContent = L.t;
+    document.getElementById('lBody').textContent = L.body;
+    var cb = document.getElementById('complete');
+    cb.textContent = done.indexOf(cur) >= 0 ? (cur < c.lessons.length - 1 ? 'Sonraki derse geç →' : 'Seviye testine geç →') : 'Dersi tamamladım';
+    document.getElementById('cPct').textContent = '%' + p;
+    document.getElementById('cBar').style.width = p + '%';
+    document.getElementById('testNote').textContent = p === 100 ? 'Tüm dersler tamam. Hazırsın.' : 'Dersleri bitirmeden de deneyebilirsin.';
+    document.getElementById('lessonList').innerHTML = c.lessons.map(function (x, i) {
+      var d = done.indexOf(i) >= 0;
+      return '<button class="lesson' + (d ? ' done' : '') + (i === cur ? ' cur' : '') + '" data-i="' + i + '"><span class="dot">' + (d ? '✓' : i + 1) + '</span><span style="flex:1"><b style="display:block;font-weight:600;font-size:15px">' + USTA.esc(x.t) + '</b><span class="muted" style="font-size:13px">' + x.d + ' dk</span></span></button>';
+    }).join('');
+    history.replaceState(null, '', 'ders.html?id=' + c.id + '&l=' + cur);
+  }
+  document.getElementById('lessonList').onclick = function (e) {
+    var b = e.target.closest('.lesson'); if (!b) return;
+    cur = +b.dataset.i; render(); window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  document.getElementById('play').onclick = function () {
+    var L = c.lessons[cur], total = L.d * 60;
+    this.style.display = 'none';
+    timer = setInterval(function () {
+      t += total / 120; // temsilî: tüm ders yaklaşık 12 saniyede oynar
+      if (t >= total) { t = total; stop(); USTA.markLesson(c.id, cur); USTA.toast('Ders tamamlandı.'); render(); return; }
+      document.getElementById('track').style.width = (100 * t / total) + '%';
+      document.getElementById('tNow').textContent = fmt(t);
+    }, 100);
+  };
+  document.getElementById('complete').onclick = function () {
+    var done = USTA.doneLessons(c.id);
+    if (done.indexOf(cur) < 0) { USTA.markLesson(c.id, cur); USTA.toast('Harika. Bir basamak daha.'); render(); return; }
+    if (cur < c.lessons.length - 1) { cur++; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+    else location.href = 'test.html?id=' + c.id;
+  };
+  render();
+</script>
+</body>
+</html>

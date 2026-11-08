@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alan Sınavı — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  /* giriş */
+  .intro{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:stretch;margin-top:36px}
+  .facts4{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--dark-2);border-radius:20px;overflow:hidden;margin-top:28px}
+  .facts4 div{background:var(--ink);padding:18px}
+  .facts4 b{display:block;font-family:var(--serif);font-weight:500;font-size:clamp(30px,3.4vw,44px);line-height:1;color:#fff}
+  .facts4 span{font-size:13px;color:#B9B3A7}
+  .types{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+  .types span{font-size:13px;padding:6px 12px;border-radius:999px;background:var(--paper)}
+  .soon{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .soon div{background:var(--white);border-radius:18px;padding:18px;display:flex;flex-direction:column;gap:8px;opacity:.75}
+  .soon svg{width:28px;height:28px;color:var(--muted)}
+  .soon small{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted-2);font-weight:600}
+  /* sınav */
+  .exam{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start;padding:32px 0 96px}
+  .xbar{position:sticky;top:72px;z-index:20;background:rgba(246,243,236,.95);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .xbar .wrap{display:flex;align-items:center;gap:20px;height:64px}
+  .xbar .ttl{font-weight:600;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .xbar .bar{flex:1;max-width:420px;margin-left:auto}
+  .timer{font-family:'Geist Mono',monospace;font-weight:600;font-size:16px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;white-space:nowrap}
+  .timer.low{background:var(--red)}
+  .qcard{background:var(--white);border-radius:28px;padding:40px;min-height:540px;display:flex;flex-direction:column}
+  .qtop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+  .qnum{font-family:var(--serif);font-size:20px;color:var(--muted)}
+  .qnum b{color:var(--red);font-weight:500;font-size:44px;letter-spacing:-.03em;margin-right:4px}
+  .qtype{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;background:var(--paper);padding:7px 14px;border-radius:999px}
+  .qtype i{width:8px;height:8px;border-radius:50%;background:var(--red)}
+  .qtext{font-family:var(--serif);font-weight:500;font-size:clamp(24px,2.6vw,34px);line-height:1.2;letter-spacing:-.02em;margin:22px 0 8px}
+  .qhint{color:var(--muted);font-size:15px;margin-bottom:22px}
+  .opts{display:flex;flex-direction:column;gap:10px}
+  .opt{display:flex;align-items:center;gap:16px;padding:16px 18px;border-radius:18px;border:1.5px solid var(--line);text-align:left;font-size:17px;transition:border-color .15s, background .15s, transform .1s;background:var(--white);width:100%}
+  .opt:hover{border-color:var(--ink)}
+  .opt:active{transform:scale(.995)}
+  .opt .L{width:36px;height:36px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:15px;flex-shrink:0}
+  .opt.sq .L{border-radius:10px}
+  .opt.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+  .opt.on .L{background:var(--red);color:#fff}
+  .tf{display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;padding:14px 0;border-top:1px solid var(--line);font-size:17px}
+  .tf .seg{display:flex;background:var(--paper);border-radius:999px;padding:4px}
+  .tf .seg button{height:38px;padding:0 18px;border-radius:999px;font-weight:600;font-size:14px;color:var(--muted)}
+  .tf .seg button.on{background:var(--ink);color:#fff}
+  .numin{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .numin input{height:76px;width:220px;font-family:var(--serif);font-size:44px;text-align:center;border:2px solid var(--line);border-radius:20px;outline:0;background:var(--paper)}
+  .numin input:focus{border-color:var(--ink);background:var(--white)}
+  .numin span{font-size:24px;font-family:var(--serif);color:var(--muted)}
+  .given{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+  .given span{font-family:'Geist Mono',monospace;font-size:15px;background:var(--ink);color:#fff;padding:8px 14px;border-radius:12px}
+  .ord{display:flex;flex-direction:column;gap:8px;counter-reset:o}
+  .ord li{list-style:none;display:flex;align-items:center;gap:14px;background:var(--paper);border-radius:16px;padding:12px 12px 12px 18px;font-size:17px;cursor:grab;border:1.5px solid transparent}
+  .ord li.drag{opacity:.4}
+  .ord li.over{border-color:var(--red)}
+  .ord li::before{counter-increment:o;content:counter(o);font-family:var(--serif);font-size:22px;color:var(--red);width:22px}
+  .ord li .g{margin-left:auto;display:flex;gap:6px}
+  .ord li .g button{width:36px;height:36px;border-radius:10px;background:var(--white);font-size:16px}
+  .ord li .g button:disabled{opacity:.3}
+  .code{background:#1C1D22;color:#E8E4DA;border-radius:18px;padding:18px 0;font-family:'Geist Mono',monospace;font-size:15px;line-height:1.75;margin-bottom:22px;overflow-x:auto}
+  .code span{display:block;white-space:pre;padding:0 20px}
+  .code .n{color:#55565C;display:inline-block;width:26px;user-select:none}
+  .k1{color:#FF7A66}.k2{color:#FFB199}.k3{color:#F2D48C}.k4{color:#9FD39A}
+  .mrow{display:grid;grid-template-columns:200px 1fr;gap:14px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+  .mrow b{font-weight:600;font-size:17px;display:flex;align-items:center;gap:10px}
+  .mrow b i{width:10px;height:10px;border-radius:3px;background:var(--red)}
+  .mrow select{height:50px;border-radius:14px;border:1.5px solid var(--line);padding:0 14px;background:var(--paper);font-size:15px;width:100%}
+  .mrow select.set{border-color:var(--ink);background:var(--white)}
+  .fig{border-radius:20px;overflow:hidden;margin-bottom:18px;background:var(--ink)}
+  .fig svg{width:100%;height:auto;display:block}
+  .hs{cursor:pointer}
+  .hs circle{transition:fill .15s}
+  .hs:hover circle.o{fill:#3A3B42}
+  .hs.on circle.o{fill:#E0402B;stroke:#E0402B}
+  .slide{background:var(--paper);border-radius:20px;padding:28px}
+  .slide output{display:block;font-family:var(--serif);font-size:72px;line-height:1;letter-spacing:-.03em;text-align:center}
+  .slide output small{font-size:22px;color:var(--muted)}
+  .slide input{width:100%;accent-color:var(--red);margin-top:18px}
+  .slide .sc{display:flex;justify-content:space-between;font-size:13px;color:var(--muted-2)}
+  .qnav{display:flex;gap:10px;align-items:center;margin-top:auto;padding-top:32px;flex-wrap:wrap}
+  .flag{display:inline-flex;align-items:center;gap:8px}
+  .flag.on{color:var(--red)}
+  .side{position:sticky;top:156px;display:flex;flex-direction:column;gap:16px}
+  .grid5{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+  .grid5 button{aspect-ratio:1;border-radius:14px;background:var(--paper);font-weight:600;position:relative;border:2px solid transparent}
+  .grid5 button.a{background:var(--ink);color:#fff}
+  .grid5 button.cur{border-color:var(--red)}
+  .grid5 button.f::after{content:'';position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:50%;background:var(--red)}
+  .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:14px}
+  .legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+  /* sonuç */
+  .score{font-family:var(--serif);font-weight:500;font-size:clamp(110px,16vw,200px);line-height:.85;letter-spacing:-.05em}
+  .tbar{display:grid;grid-template-columns:150px 1fr 48px;gap:14px;align-items:center;font-size:15px;padding:8px 0}
+  .tbar .bar{height:12px;border-radius:6px}
+  .rev{border-top:1px solid var(--line);padding:22px 0;display:grid;grid-template-columns:44px 1fr;gap:16px}
+  .rev .m{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff}
+  .rev .ex{background:var(--paper);border-radius:14px;padding:12px 16px;margin-top:10px;font-size:15px;color:var(--muted)}
+  .rev .ex b{color:var(--ink);font-weight:600}
+  @media (max-width:1140px){.soon{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:960px){.intro{grid-template-columns:1fr}.exam{grid-template-columns:1fr}.side{position:static;order:-1}.side .card:last-child{display:none}.grid5{grid-template-columns:repeat(10,1fr)}.grid5 button{border-radius:10px;font-size:13px}}
+  @media (max-width:600px){.qcard{padding:22px 18px;border-radius:22px;min-height:0}.facts4{grid-template-columns:1fr 1fr}.mrow{grid-template-columns:1fr;gap:8px}.tf{grid-template-columns:1fr}.tf .seg{justify-self:start}.numin input{width:100%}.xbar .ttl{display:none}.tbar{grid-template-columns:100px 1fr 40px}.soon{grid-template-columns:1fr 1fr}.grid5{gap:4px}.opt{font-size:16px;padding:14px}.qtext{font-size:22px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main id="app"></main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script>
+  var $ = function (id) { return document.getElementById(id); };
+  var app = $('app');
+  var EXAM = { id: 'model-roket-kalfa', course: 'model-roket-tasarimi', title: 'Model Roket · Kalfa Alan Sınavı', mins: 20, pass: 70 };
+  var TOPICS = ['Kararlılık', 'Kuvvet ve hareket', 'Tasarım', 'Uçuş ve kurtarma', 'Veri ve kod'];
+  var TYPE = { mc: 'Çoktan seçmeli', hot: 'Şema üzerinde işaretle', num: 'Sayısal cevap', tf: 'Doğru / yanlış', order: 'Sıralama', code: 'Kod çıktısı', match: 'Eşleştirme', graph: 'Grafik okuma', multi: 'Çoklu seçim', slider: 'Kaydırarak tahmin' };
+
+  function rocketSvg() {
+    var X = function (mm) { return 60 + mm * 0.8; }, pts = [['A', 460], ['B', 540], ['C', 640], ['D', 700]];
+    var s = '<svg viewBox="0 0 800 260" font-family="Geist, Arial, sans-serif"><defs><pattern id="qg" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="rgba(246,243,236,.07)"/></pattern></defs><rect width="800" height="260" fill="#16171B"/><rect width="800" height="260" fill="url(#qg)"/>' +
+      '<path d="M60 120Q110 98 172 102V138Q110 142 60 120Z" fill="none" stroke="#F6F3EC" stroke-width="1.6"/><rect x="172" y="102" width="528" height="36" fill="none" stroke="#F6F3EC" stroke-width="1.6"/>' +
+      '<path d="M630 102L672 62H702L700 102M630 138L672 178H702L700 138" fill="none" stroke="#F6F3EC" stroke-width="1.6"/>' +
+      '<g transform="translate(' + X(600) + ' 120)"><circle r="9" fill="#16171B" stroke="#E0402B" stroke-width="2"/><circle r="3.5" fill="#E0402B"/></g><text x="' + X(600) + '" y="86" text-anchor="middle" fill="#E0402B" font-size="13" font-weight="600">BM · 600 mm</text>' +
+      pts.map(function (p) { return '<g class="hs" data-hs="' + p[0] + '" tabindex="0" role="button" aria-label="Nokta ' + p[0] + '"><circle class="o" cx="' + X(p[1]) + '" cy="168" r="16" fill="#16171B" stroke="#F6F3EC" stroke-width="1.6"/><text x="' + X(p[1]) + '" y="173" text-anchor="middle" fill="#F6F3EC" font-size="14" font-weight="600" pointer-events="none">' + p[0] + '</text><path d="M' + X(p[1]) + ' 152V140" stroke="#F6F3EC" stroke-dasharray="2 2"/></g>'; }).join('');
+    for (var mm = 0; mm <= 800; mm += 100) s += '<path d="M' + X(mm) + ' 214V' + (mm % 200 ? 220 : 224) + '" stroke="rgba(246,243,236,.6)"/><text x="' + X(mm) + '" y="240" text-anchor="middle" fill="rgba(246,243,236,.6)" font-size="11">' + mm + '</text>';
+    return s + '<path d="M60 214H700" stroke="rgba(246,243,236,.6)"/><text x="740" y="240" text-anchor="end" fill="rgba(246,243,236,.45)" font-size="11">mm</text></svg>';
+  }
+  function graphSvg() {
+    var d = [0, 20, 65, 115, 160, 195, 210, 205, 185, 160, 130, 100, 70, 38, 5];
+    var X = function (t) { return 70 + t * 48; }, Y = function (h) { return 230 - h * 0.8; };
+    var s = '<svg viewBox="0 0 800 280" font-family="Geist, Arial, sans-serif" id="gsvg"><rect width="800" height="280" fill="#16171B"/>';
+    for (var h = 0; h <= 250; h += 50) s += '<path d="M70 ' + Y(h) + 'H742" stroke="rgba(246,243,236,' + (h ? .1 : .5) + ')"/><text x="58" y="' + (Y(h) + 4) + '" text-anchor="end" fill="rgba(246,243,236,.6)" font-size="11">' + h + '</text>';
+    for (var t = 0; t <= 14; t += 1) s += '<path d="M' + X(t) + ' 230V' + (t % 2 ? 234 : 238) + '" stroke="rgba(246,243,236,.5)"/>' + (t % 2 ? '' : '<text x="' + X(t) + '" y="254" text-anchor="middle" fill="rgba(246,243,236,.6)" font-size="11">' + t + '</text>');
+    s += '<path d="M' + d.map(function (h, t) { return X(t) + ' ' + Y(h); }).join('L') + '" fill="none" stroke="#E0402B" stroke-width="3" stroke-linejoin="round"/>';
+    s += '<text x="70" y="30" fill="#F6F3EC" font-size="13" font-weight="600">İRTİFA (m)</text><text x="742" y="272" text-anchor="end" fill="rgba(246,243,236,.6)" font-size="11">zaman (s)</text>';
+    s += '<g id="gx" style="display:none"><path id="gxl" d="" stroke="#F6F3EC" stroke-dasharray="3 3"/><circle id="gxc" r="5" fill="#F6F3EC"/><rect id="gxr" width="104" height="26" rx="6" fill="#F6F3EC"/><text id="gxt" fill="#16171B" font-size="12" font-weight="600"></text></g>';
+    return s + '<rect id="ghit" x="70" y="30" width="672" height="200" fill="transparent"/></svg>';
+  }
+
+  var Qs = [
+    { type: 'mc', topic: 0, q: 'Kararlı bir model rokette ağırlık merkezi (AM) ile basınç merkezi (BM) nasıl konumlanmalı?', opts: ['AM, BM’nin önünde (buruna daha yakın)', 'BM, AM’nin önünde', 'İkisi aynı noktada', 'Konumları kararlılığı etkilemez'], a: 0, ex: 'AM önde olursa roket sapınca hava kuvveti onu geri çevirir. Tersi olursa takla atar.' },
+    { type: 'hot', topic: 0, q: 'Gövde çapı 40 mm. Kararlılık payının 1,5 kalibre olması için ağırlık merkezi hangi noktada olmalı?', hint: 'Şemada bir noktaya dokun. Ölçüler burun ucundan.', a: 'B', ex: 'Pay × çap = 1,5 × 40 = 60 mm. AM, BM’nin 60 mm önünde olmalı: 600 − 60 = 540 mm, yani B.' },
+    { type: 'num', topic: 1, q: 'Roket rampadan ayrılırken net ivmesi kaç m/s² olur?', given: ['itki = 12 N', 'kütle = 0,4 kg', 'g = 9,8 m/s²'], unit: 'm/s²', a: 20.2, tol: 0.15, ex: 'Ağırlık = 0,4 × 9,8 = 3,92 N. Net kuvvet = 12 − 3,92 = 8,08 N. İvme = 8,08 ⁄ 0,4 = 20,2 m/s².' },
+    { type: 'tf', topic: 2, q: 'Aşağıdaki ifadeler doğru mu, yanlış mı?', items: [['Kanatçıkları büyütmek basınç merkezini arkaya kaydırır.', true], ['Buruna ağırlık eklemek ağırlık merkezini arkaya kaydırır.', false], ['Motor yandıkça roket hafifler ve ağırlık merkezi yer değiştirir.', true], ['Kararlılık payı 4 kalibre olan roket rüzgâra daha az döner.', false]], ex: 'Burun ağırlığı AM’yi öne alır. Pay çok büyükse roket rüzgâra doğru fazla döner (rüzgâr gülü etkisi).' },
+    { type: 'order', topic: 3, q: 'Bir uçuşun olaylarını doğru sıraya koy.', hint: 'Sürükle ya da oklarla taşı.', items: ['Ateşleme', 'Yanma sonu', 'Tepe noktası', 'Paraşüt açılması', 'Yere iniş'], start: [2, 0, 4, 1, 3], ex: 'Motor ateşlenir, yakıt biter (yanma sonu), roket yükselmeye devam edip tepe noktasına ulaşır, paraşüt açılır ve iner.' },
+    { type: 'code', topic: 4, q: 'Bu Python kodu ne yazdırır?', code: ['irtifa = [0, 45, 120, 180, 205, 190, 150]', 'tepe = max(irtifa)', 'print(irtifa.index(tepe), tepe)'], opts: ['4 205', '5 205', '205 4', '3 180'], a: 0, ex: 'En büyük değer 205. Listede 0’dan saymaya başlanır, 205 dördüncü sırada: çıktı “4 205”.' },
+    { type: 'match', topic: 2, q: 'Her parçayı görevine eşleştir.', left: ['Burun konisi', 'Kanatçık', 'Motor', 'Paraşüt'], right: ['Havayı yarar, sürüklenmeyi azaltır', 'Yönü korur, BM’yi arkaya alır', 'İtki üretir', 'İnişi yavaşlatır'], ex: 'Burun havayı yarar, kanatçık yönü korur, motor iter, paraşüt yavaşlatır.' },
+    { type: 'graph', topic: 4, q: 'Grafiğe göre roket tepe noktasına ne zaman ulaştı ve kaç metreye çıktı?', hint: 'Grafiğin üzerinde gezinerek değerleri okuyabilirsin.', opts: ['3. saniye · yaklaşık 115 m', '6. saniye · yaklaşık 210 m', '7. saniye · yaklaşık 250 m', '14. saniye · yaklaşık 5 m'], a: 1, ex: 'Eğrinin en yüksek noktası 6. saniyede, yaklaşık 210 metrede.' },
+    { type: 'multi', topic: 3, q: 'Fırlatma öncesi güvenlik kontrolünde hangileri yapılmalı?', hint: 'Birden fazla doğru cevap var.', opts: ['Rüzgâr hızını kontrol etmek', 'Fırlatma alanında kimse olmadığından emin olmak', 'Paraşütün düzgün katlanıp yerleştirildiğini kontrol etmek', 'Motoru elle ısıtarak hazırlamak', 'Daha iyi görmek için rampaya yaklaşmak'], a: [0, 1, 2], ex: 'Rüzgâr, boş alan ve paraşüt kontrol edilir. Motora müdahale edilmez, rampaya güvenli mesafede durulur.' },
+    { type: 'slider', topic: 0, q: 'Bu roketin kararlılık payı kaç kalibre?', given: ['AM = 500 mm', 'BM = 580 mm', 'çap = 40 mm'], min: 0, max: 4, step: 0.1, a: 2, tol: 0.05, ex: '(580 − 500) ⁄ 40 = 2,0 kalibre: uygun aralıkta.' }
+  ];
+
+  var ans, flags, cur, endAt, tick, state = 'intro';
+  function reset() {
+    ans = Qs.map(function (q) {
+      if (q.type === 'tf') return q.items.map(function () { return null; });
+      if (q.type === 'order') return { o: q.start.slice(), t: false };
+      if (q.type === 'match') return q.left.map(function () { return -1; });
+      if (q.type === 'multi') return q.opts.map(function () { return false; });
+      if (q.type === 'slider') return { v: 1, t: false };
+      return null;
+    });
+    flags = Qs.map(function () { return false; }); cur = 0;
+  }
+  function answered(i) {
+    var q = Qs[i], a = ans[i];
+    if (q.type === 'tf') return a.every(function (x) { return x !== null; });
+    if (q.type === 'order' || q.type === 'slider') return a.t;
+    if (q.type === 'match') return a.every(function (x) { return x >= 0; });
+    if (q.type === 'multi') return a.some(Boolean);
+    if (q.type === 'num') return a !== null && String(a).trim() !== '';
+    return a !== null;
+  }
+  function score(i) {
+    var q = Qs[i], a = ans[i];
+    switch (q.type) {
+      case 'mc': case 'code': case 'graph': return a === q.a ? 1 : 0;
+      case 'hot': return a === q.a ? 1 : 0;
+      case 'num': var v = parseFloat(String(a || '').replace(',', '.')); return Math.abs(v - q.a) <= q.tol ? 1 : 0;
+      case 'tf': return a.filter(function (x, k) { return x === q.items[k][1]; }).length / q.items.length;
+      case 'order': return a.o.filter(function (x, k) { return x === k; }).length / q.items.length;
+      case 'match': return a.filter(function (x, k) { return x === k; }).length / q.left.length;
+      case 'multi': var good = 0, bad = 0; a.forEach(function (x, k) { if (x) { q.a.indexOf(k) >= 0 ? good++ : bad++; } }); return Math.max(0, (good - bad) / q.a.length);
+      case 'slider': return a.t && Math.abs(a.v - q.a) <= q.tol ? 1 : 0;
+    }
+    return 0;
+  }
+  function fmtN(n) { return String(n).replace('.', ','); }
+
+  /* ---------- giriş ekranı ---------- */
+  function intro() {
+    state = 'intro'; clearInterval(tick);
+    var best = (USTA.state.exams || {})[EXAM.id];
+    var soon = [['havacilik', 'İHA · Kalfa'], ['yapayzeka', 'Yapay Zekâ · Çırak'], ['robotik', 'Robotik · Kalfa'], ['enerji', 'Enerji · Çırak']];
+    app.innerHTML = '<section style="padding-top:56px"><div class="wrap">' +
+      '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Alan sınavı</span><span class="demo-pill">Demo sınav</span></div>' +
+      '<h1 style="margin-top:14px;font-size:clamp(44px,6vw,84px);max-width:960px">Bir alanda ne kadar ustasın?</h1>' +
+      '<p class="muted" style="font-size:19px;max-width:660px;margin-top:14px">Alan sınavları yalnızca bilgiyi değil, şema okumayı, hesap yapmayı ve kodu anlamayı da ölçer. Demo için bir alan açık: Model Roket.</p>' +
+      '<div class="intro">' +
+        '<div class="card card-dark" style="padding:36px;display:flex;flex-direction:column">' +
+          '<div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start"><div><span class="tag">Uzay ve Roket · Kalfa</span><h2 style="color:#fff;margin-top:10px;font-size:clamp(32px,3.6vw,48px)">Model Roket alan sınavı</h2></div>' + USTA.icon('roket', '') .replace('<svg ', '<svg style="width:64px;height:64px;color:var(--red);flex-shrink:0" ') + '</div>' +
+          '<div class="facts4"><div><b>10</b><span>soru</span></div><div><b>20</b><span>dakika</span></div><div><b>%70</b><span>geçme notu</span></div><div><b>10</b><span>soru türü</span></div></div>' +
+          '<p style="color:#B9B3A7;margin-top:22px;font-size:15px">Soruları istediğin sırayla çözebilir, emin olmadıklarını işaretleyip sonra dönebilirsin. Geçersen “Model roket tasarımı” sertifikan adına düzenlenir.</p>' +
+          (best ? '<p style="margin-top:12px;font-size:15px;color:#fff">En iyi sonucun: <b>%' + best.score + '</b> · ' + best.date + '</p>' : '') +
+          '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:28px"><button class="btn btn-red btn-lg" id="go">Sınava başla</button><a class="btn btn-lg" style="color:#fff;border:1.5px solid var(--dark-3)" href="doc.html?d=roket-anatomisi">Önce Doc’u oku</a></div>' +
+        '</div>' +
+        '<div class="card" style="padding:32px"><h3>Seni neler bekliyor?</h3><p class="muted" style="margin-top:8px;font-size:15px">Her soru farklı bir beceriyi ölçer.</p><div class="types">' +
+          Object.keys(TYPE).map(function (k) { return '<span>' + TYPE[k] + '</span>'; }).join('') + '</div>' +
+          '<h3 style="margin-top:28px;font-size:22px">Konular</h3><div style="margin-top:10px">' + TOPICS.map(function (t) { var n = Qs.filter(function (q) { return TOPICS[q.topic] === t; }).length; return '<div style="display:flex;justify-content:space-between;padding:9px 0;border-top:1px solid var(--line);font-size:15px"><span>' + t + '</span><span class="muted">' + n + ' soru</span></div>'; }).join('') + '</div>' +
+          '<p class="muted" style="font-size:13px;margin-top:18px">Sorular ve sonuçlar temsilîdir; bu bir resmî sınav değildir.</p></div>' +
+      '</div>' +
+      '<div class="head" style="margin:72px 0 20px"><h2 style="font-size:clamp(28px,3vw,40px)">Diğer alan sınavları</h2><p>Her alan için Çırak, Kalfa ve Usta sınavları hazırlanıyor.</p></div>' +
+      '<div class="soon">' + soon.map(function (s) { return '<div>' + USTA.icon(USTA.areaById(s[0]).icon) + '<b style="font-weight:600">' + s[1] + '</b><small>Yakında</small></div>'; }).join('') + '</div>' +
+      '</div></section>';
+    $('go').onclick = start;
+  }
+
+  /* ---------- sınav ---------- */
+  function start() {
+    reset(); state = 'exam'; endAt = Date.now() + EXAM.mins * 60000;
+    app.innerHTML = '<div class="xbar"><div class="wrap"><span class="ttl">' + EXAM.title + ' <span class="demo-pill" style="margin-left:8px">Demo</span></span><div class="bar"><i id="pbar" style="width:0"></i></div><span class="muted" id="pcount" style="font-size:14px;white-space:nowrap"></span><span class="timer" id="timer"></span></div></div>' +
+      '<div class="wrap exam"><div class="qcard" id="qcard"></div>' +
+      '<aside class="side"><div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-weight:600">Sorular</b><span class="muted" style="font-size:13px" id="acount"></span></div><div class="grid5" id="grid5"></div>' +
+        '<div class="legend"><span><i style="background:var(--ink)"></i>Cevaplandı</span><span><i style="background:var(--paper);border:1px solid var(--line)"></i>Boş</span><span><i style="background:var(--red);border-radius:50%"></i>İşaretli</span></div>' +
+        '<button class="btn btn-ink" style="width:100%;margin-top:18px" id="finish">Sınavı bitir</button></div>' +
+        '<div class="card" style="background:var(--white)"><b style="font-weight:600;font-size:15px">Kısayollar</b><p class="muted" style="font-size:13px;margin-top:6px">← → soru değiştir · 1–5 seçenek seç · F işaretle</p></div></aside></div>';
+    $('finish').onclick = function () { var left = Qs.filter(function (q, i) { return !answered(i); }).length; if (left && !confirm(left + ' soru boş. Yine de bitirilsin mi?')) return; finish(); };
+    $('grid5').onclick = function (e) { var b = e.target.closest('button'); if (b) go(+b.dataset.i); };
+    clearInterval(tick); tick = setInterval(timer, 500); timer();
+    render(); window.scrollTo(0, 0);
+  }
+  function timer() {
+    var s = Math.max(0, Math.round((endAt - Date.now()) / 1000)), el = $('timer'); if (!el) return;
+    el.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="7" cy="8" r="5"/><path d="M7 5.5V8l1.6 1M5.5 1.5h3"/></svg>' + Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2);
+    el.classList.toggle('low', s < 120);
+    if (s <= 0) { USTA.toast('Süre doldu.'); finish(); }
+  }
+  function go(i) { if (i < 0 || i >= Qs.length) return; cur = i; render(); var c = $('qcard'); if (c.getBoundingClientRect().top < 120) window.scrollTo({ top: c.getBoundingClientRect().top + scrollY - 150, behavior: 'smooth' }); }
+  function side() {
+    var n = Qs.filter(function (q, i) { return answered(i); }).length;
+    $('grid5').innerHTML = Qs.map(function (q, i) { return '<button data-i="' + i + '" class="' + (answered(i) ? 'a ' : '') + (i === cur ? 'cur ' : '') + (flags[i] ? 'f' : '') + '" aria-label="Soru ' + (i + 1) + '">' + (i + 1) + '</button>'; }).join('');
+    $('acount').textContent = n + ' / ' + Qs.length + ' cevaplandı';
+    $('pbar').style.width = (100 * n / Qs.length) + '%';
+    $('pcount').textContent = n + '/' + Qs.length;
+  }
+  var L = 'ABCDE';
+  function body(q, i) {
+    var a = ans[i];
+    switch (q.type) {
+      case 'mc': case 'graph': case 'code':
+        return (q.type === 'code' ? '<div class="code">' + q.code.map(function (l, k) { return '<span><i class="n">' + (k + 1) + '</i>' + hlpy(l) + '</span>'; }).join('') + '</div>' : '') +
+          (q.type === 'graph' ? '<div class="fig">' + graphSvg() + '</div>' : '') +
+          '<div class="opts">' + q.opts.map(function (o, k) { return '<button class="opt' + (a === k ? ' on' : '') + '" data-k="' + k + '"><span class="L">' + L[k] + '</span><span' + (q.type === 'code' ? ' style="font-family:\'Geist Mono\',monospace"' : '') + '>' + o + '</span></button>'; }).join('') + '</div>';
+      case 'multi':
+        return '<div class="opts">' + q.opts.map(function (o, k) { return '<button class="opt sq' + (a[k] ? ' on' : '') + '" data-m="' + k + '" aria-pressed="' + a[k] + '"><span class="L">' + (a[k] ? '✓' : L[k]) + '</span><span>' + o + '</span></button>'; }).join('') + '</div>';
+      case 'hot':
+        return '<div class="fig">' + rocketSvg() + '</div><p class="muted" style="font-size:15px">Seçimin: <b style="color:var(--ink)" id="hsv">' + (a ? 'Nokta ' + a : '—') + '</b></p>';
+      case 'num':
+        return '<div class="given">' + q.given.map(function (g) { return '<span>' + g + '</span>'; }).join('') + '</div><div class="numin"><input id="num" inputmode="decimal" autocomplete="off" placeholder="?" value="' + (a === null ? '' : USTA.esc(a)) + '" aria-label="Cevap"><span>' + q.unit + '</span></div><p class="muted" style="font-size:14px;margin-top:12px">Ondalık için virgül ya da nokta kullanabilirsin.</p>';
+      case 'tf':
+        return q.items.map(function (it, k) { return '<div class="tf"><span>' + it[0] + '</span><div class="seg" role="group"><button data-tf="' + k + '" data-v="1" class="' + (a[k] === true ? 'on' : '') + '">Doğru</button><button data-tf="' + k + '" data-v="0" class="' + (a[k] === false ? 'on' : '') + '">Yanlış</button></div></div>'; }).join('');
+      case 'order':
+        return '<ol class="ord" id="ord">' + a.o.map(function (x, k) { return '<li draggable="true" data-k="' + k + '"><span>' + q.items[x] + '</span><span class="g"><button data-up="' + k + '" aria-label="Yukarı"' + (k ? '' : ' disabled') + '>↑</button><button data-dn="' + k + '" aria-label="Aşağı"' + (k < a.o.length - 1 ? '' : ' disabled') + '>↓</button></span></li>'; }).join('') + '</ol>';
+      case 'match':
+        return q.left.map(function (l, k) { return '<div class="mrow"><b><i></i>' + l + '</b><select data-mt="' + k + '" class="' + (a[k] >= 0 ? 'set' : '') + '" aria-label="' + l + '"><option value="-1">Görev seç…</option>' + MORDER.map(function (r) { return '<option value="' + r + '"' + (a[k] === r ? ' selected' : '') + '>' + q.right[r] + '</option>'; }).join('') + '</select></div>'; }).join('');
+      case 'slider':
+        return '<div class="given">' + q.given.map(function (g) { return '<span>' + g + '</span>'; }).join('') + '</div><div class="slide"><output id="sv">' + (a.t ? fmtN(a.v.toFixed(1)) : '?') + ' <small>kalibre</small></output><input type="range" id="sl" min="' + q.min + '" max="' + q.max + '" step="' + q.step + '" value="' + a.v + '" aria-label="Kalibre"><div class="sc"><span>0 · kararsız</span><span>1</span><span>2</span><span>3</span><span>4 · aşırı kararlı</span></div></div>';
+    }
+  }
+  var MORDER = [2, 0, 3, 1];
+  function hlpy(l) {
+    return USTA.esc(l).replace(/\b(print|max)\b(?=\()/g, '<b class="k3" style="font-weight:400">$1</b>').replace(/\.(index)\(/g, '.<b class="k3" style="font-weight:400">$1</b>(').replace(/\b(\d+)\b/g, '<b class="k2" style="font-weight:400">$1</b>');
+  }
+  function render() {
+    var q = Qs[cur];
+    $('qcard').innerHTML = '<div class="qtop"><span class="qnum"><b>' + (cur + 1) + '</b>/ ' + Qs.length + '</span><div style="display:flex;gap:8px;flex-wrap:wrap"><span class="badge">' + TOPICS[q.topic] + '</span><span class="qtype"><i></i>' + TYPE[q.type] + '</span></div></div>' +
+      '<h2 class="qtext">' + q.q + '</h2>' + (q.hint ? '<p class="qhint">' + q.hint + '</p>' : '<div style="height:14px"></div>') +
+      '<div id="qbody">' + body(q, cur) + '</div>' +
+      '<div class="qnav"><button class="btn btn-line" id="prev"' + (cur ? '' : ' disabled') + '>← Önceki</button><button class="btn btn-ghost flag' + (flags[cur] ? ' on' : '') + '" id="flag"><svg width="16" height="16" viewBox="0 0 16 16" fill="' + (flags[cur] ? 'currentColor' : 'none') + '" stroke="currentColor" stroke-width="1.6"><path d="M3 14V2h9l-2 3 2 3H3"/></svg>' + (flags[cur] ? 'İşaretlendi' : 'Sonra dön') + '</button>' +
+      '<span style="margin-left:auto"></span>' + (cur < Qs.length - 1 ? '<button class="btn btn-red" id="next">Sonraki →</button>' : '<button class="btn btn-red" id="next">Bitir</button>') + '</div>';
+    bind(q); side();
+  }
+  function changed() { side(); }
+  function bind(q) {
+    var qb = $('qbody'), i = cur;
+    $('prev').onclick = function () { go(cur - 1); };
+    $('next').onclick = function () { if (cur < Qs.length - 1) go(cur + 1); else $('finish').click(); };
+    $('flag').onclick = function () { flags[cur] = !flags[cur]; render(); };
+    qb.onclick = function (e) {
+      var b;
+      if ((b = e.target.closest('[data-k].opt'))) { ans[i] = +b.dataset.k; [].forEach.call(qb.querySelectorAll('.opt'), function (o) { o.classList.toggle('on', o === b); }); changed(); }
+      else if ((b = e.target.closest('[data-m]'))) { var k = +b.dataset.m; ans[i][k] = !ans[i][k]; b.classList.toggle('on', ans[i][k]); b.setAttribute('aria-pressed', ans[i][k]); b.querySelector('.L').textContent = ans[i][k] ? '✓' : L[k]; changed(); }
+      else if ((b = e.target.closest('[data-tf]'))) { ans[i][+b.dataset.tf] = b.dataset.v === '1'; [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle('on', x === b); }); changed(); }
+      else if ((b = e.target.closest('[data-hs]'))) { pickHs(b.dataset.hs); }
+      else if ((b = e.target.closest('[data-up],[data-dn]'))) { var o = ans[i].o, k2 = +(b.dataset.up || b.dataset.dn), j = b.dataset.up ? k2 - 1 : k2 + 1; var t = o[k2]; o[k2] = o[j]; o[j] = t; ans[i].t = true; qb.innerHTML = body(q, i); bind(q); changed(); }
+    };
+    function pickHs(v) { ans[i] = v; [].forEach.call(qb.querySelectorAll('.hs'), function (g) { g.classList.toggle('on', g.dataset.hs === v); }); $('hsv').textContent = 'Nokta ' + v; changed(); }
+    if (q.type === 'hot') {
+      if (ans[i]) pickHs(ans[i]);
+      [].forEach.call(qb.querySelectorAll('.hs'), function (g) { g.onkeydown = function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickHs(g.dataset.hs); } }; });
+    }
+    if (q.type === 'num') { var inp = $('num'); inp.oninput = function () { ans[i] = inp.value; changed(); }; }
+    if (q.type === 'slider') { var sl = $('sl'); sl.oninput = function () { ans[i] = { v: +sl.value, t: true }; $('sv').innerHTML = fmtN((+sl.value).toFixed(1)) + ' <small>kalibre</small>'; changed(); }; }
+    if (q.type === 'match') [].forEach.call(qb.querySelectorAll('select'), function (s) { s.onchange = function () { ans[i][+s.dataset.mt] = +s.value; s.classList.toggle('set', +s.value >= 0); changed(); }; });
+    if (q.type === 'order') {
+      var dragK = null;
+      [].forEach.call(qb.querySelectorAll('.ord li'), function (li) {
+        li.ondragstart = function (e) { dragK = +li.dataset.k; li.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', dragK); } catch (er) {} };
+        li.ondragend = function () { li.classList.remove('drag'); };
+        li.ondragover = function (e) { e.preventDefault(); li.classList.add('over'); };
+        li.ondragleave = function () { li.classList.remove('over'); };
+        li.ondrop = function (e) { e.preventDefault(); var to = +li.dataset.k; if (dragK === null || dragK === to) return; var o = ans[i].o, x = o.splice(dragK, 1)[0]; o.splice(to, 0, x); ans[i].t = true; qb.innerHTML = body(q, i); bind(q); changed(); };
+      });
+    }
+    if (q.type === 'graph') {
+      var svg = $('gsvg'), hit = $('ghit'), d = [0, 20, 65, 115, 160, 195, 210, 205, 185, 160, 130, 100, 70, 38, 5];
+      hit.onmousemove = function (e) {
+        var r = svg.getBoundingClientRect(), x = (e.clientX - r.left) * 800 / r.width, t = Math.max(0, Math.min(14, Math.round((x - 70) / 48))), h = d[t], px = 70 + t * 48, py = 230 - h * 0.8;
+        $('gx').style.display = ''; $('gxl').setAttribute('d', 'M' + px + ' 230V' + py); $('gxc').setAttribute('cx', px); $('gxc').setAttribute('cy', py);
+        var bx = Math.min(px + 10, 636); $('gxr').setAttribute('x', bx); $('gxr').setAttribute('y', py - 34); $('gxt').setAttribute('x', bx + 10); $('gxt').setAttribute('y', py - 17); $('gxt').textContent = t + ' s · ' + h + ' m';
+      };
+      hit.onmouseleave = function () { $('gx').style.display = 'none'; };
+    }
+  }
+  document.addEventListener('keydown', function (e) {
+    if (state !== 'exam' || /INPUT|SELECT|TEXTAREA/.test(e.target.tagName)) return;
+    if (e.key === 'ArrowRight') go(cur + 1);
+    else if (e.key === 'ArrowLeft') go(cur - 1);
+    else if (e.key === 'f' || e.key === 'F') $('flag').click();
+    else if (/^[1-5]$/.test(e.key)) { var b = $('qbody').querySelectorAll('.opt')[+e.key - 1]; if (b) b.click(); }
+  });
+
+  /* ---------- sonuç ---------- */
+  function finish() {
+    if (state !== 'exam') return; state = 'result'; clearInterval(tick);
+    var sc = Qs.map(function (q, i) { return score(i); }), total = Math.round(100 * sc.reduce(function (a, b) { return a + b; }, 0) / Qs.length), pass = total >= EXAM.pass;
+    var used = EXAM.mins * 60 - Math.max(0, Math.round((endAt - Date.now()) / 1000));
+    USTA.state.exams = USTA.state.exams || {};
+    var prev = USTA.state.exams[EXAM.id];
+    if (!prev || total > prev.score) USTA.state.exams[EXAM.id] = { score: total, date: new Date().toISOString().slice(0, 10) };
+    USTA.save();
+    var cert = pass ? USTA.issueCert(EXAM.course, total) : null;
+    var byT = TOPICS.map(function (t, k) { var ix = Qs.map(function (q, i) { return q.topic === k ? i : -1; }).filter(function (x) { return x >= 0; }); return { t: t, p: Math.round(100 * ix.reduce(function (a, i) { return a + sc[i]; }, 0) / ix.length) }; });
+    app.innerHTML = '<section style="padding-top:56px"><div class="wrap">' +
+      '<div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span class="eyebrow">Sonuç</span><span class="demo-pill">Demo</span></div>' +
+      '<div class="grid g2" style="gap:48px;align-items:end;margin-top:24px">' +
+        '<div><div class="score" style="color:' + (pass ? 'var(--ink)' : 'var(--red)') + '">%' + total + '</div><h2 style="margin-top:18px;font-size:clamp(32px,4vw,52px)">' + (pass ? 'Geçtin. Kalfa basamağı senin.' : 'Bu sefer olmadı. Basamak yerinde duruyor.') + '</h2>' +
+          '<p class="muted" style="font-size:18px;margin-top:12px">' + sc.filter(function (x) { return x === 1; }).length + ' tam doğru · ' + sc.filter(function (x) { return x > 0 && x < 1; }).length + ' kısmi · geçme notu %' + EXAM.pass + ' · süre ' + Math.floor(used / 60) + ' dk ' + (used % 60) + ' sn</p>' +
+          '<div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:28px">' + (pass ? '<a class="btn btn-red btn-lg" href="sertifika.html?kod=' + cert.code + '">Sertifikanı gör</a>' : '<a class="btn btn-red btn-lg" href="doc.html?d=roket-anatomisi">Konuyu tekrar et</a>') + '<button class="btn btn-line btn-lg" id="again">Yeniden çöz</button></div></div>' +
+        '<div class="card"><h3 style="font-size:22px">Konulara göre</h3><div style="margin-top:14px">' + byT.map(function (b) { return '<div class="tbar"><span>' + b.t + '</span><div class="bar"><i style="width:' + b.p + '%;background:' + (b.p >= 70 ? 'var(--ink)' : 'var(--red)') + '"></i></div><b style="text-align:right;font-weight:600">%' + b.p + '</b></div>'; }).join('') + '</div>' +
+          '<p class="muted" style="font-size:14px;margin-top:14px">' + (function () { var w = byT.slice().sort(function (a, b) { return a.p - b.p; })[0]; return w.p < 100 ? 'En çok çalışman gereken konu: <b style="color:var(--ink)">' + w.t + '</b>.' : 'Tüm konularda tam puan.'; })() + '</p></div>' +
+      '</div>' +
+      '<div class="head" style="margin:72px 0 8px"><h2 style="font-size:clamp(28px,3vw,40px)">Cevap anahtarı</h2><p>Her sorunun açıklaması burada. Yanlışların, bir sonraki denemenin yol haritası.</p></div>' +
+      Qs.map(function (q, i) { var s = sc[i], col = s === 1 ? 'var(--ok)' : s > 0 ? 'var(--muted)' : 'var(--red)'; return '<div class="rev"><span class="m" style="background:' + col + '">' + (s === 1 ? '✓' : s > 0 ? '½' : '×') + '</span><div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center"><b style="font-weight:600">Soru ' + (i + 1) + '</b><span class="badge" style="height:24px;font-size:12px">' + TYPE[q.type] + '</span><span class="muted" style="font-size:13px">' + Math.round(s * 10) + ' / 10 puan</span></div><p style="margin-top:6px;font-size:17px">' + q.q + '</p><div class="ex"><b>Doğrusu:</b> ' + key(q) + '<br>' + q.ex + '</div></div></div>'; }).join('') +
+      '</div></section>';
+    $('again').onclick = intro; window.scrollTo(0, 0);
+  }
+  function key(q) {
+    switch (q.type) {
+      case 'mc': case 'code': case 'graph': return L[q.a] + ') ' + q.opts[q.a];
+      case 'hot': return 'Nokta ' + q.a + ' (540 mm)';
+      case 'num': return fmtN(q.a) + ' ' + q.unit;
+      case 'tf': return q.items.map(function (it) { return it[1] ? 'D' : 'Y'; }).join(' · ');
+      case 'order': return q.items.join(' → ');
+      case 'match': return q.left.map(function (l, k) { return l + ': ' + q.right[k].toLocaleLowerCase('tr'); }).join(' · ');
+      case 'multi': return q.a.map(function (k) { return q.opts[k]; }).join(', ');
+      case 'slider': return fmtN(q.a.toFixed(1)) + ' kalibre';
+    }
+  }
+  intro();
+</script>
+</body>
+</html>

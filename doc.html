@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doc — USTA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300..700&family=Geist:wght@400..700&family=Geist+Mono:wght@400..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .doc{display:grid;grid-template-columns:240px minmax(0,1fr) 200px;gap:48px;align-items:start;padding-top:40px;padding-bottom:96px}
+  .side{position:sticky;top:96px;max-height:calc(100vh - 120px);overflow:auto;font-size:15px;padding-right:4px}
+  .side .grp{margin-bottom:22px}
+  .side .grp b{display:flex;gap:8px;align-items:center;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);font-weight:600;margin-bottom:8px}
+  .side .grp b svg{width:18px;height:18px;color:var(--red)}
+  .side a{display:block;padding:7px 12px;border-radius:10px;color:var(--muted);border-left:2px solid transparent}
+  .side a:hover{color:var(--ink);background:var(--white)}
+  .side a.on{color:var(--ink);background:var(--white);font-weight:600;border-left-color:var(--red)}
+  .side .soon{display:flex;justify-content:space-between;padding:7px 12px;color:var(--muted-3);font-size:14px}
+  .side .soon small{font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+  .crumbs{font-size:14px;color:var(--muted-2);display:flex;gap:8px;flex-wrap:wrap}
+  .crumbs a:hover{color:var(--ink)}
+  article h1{font-size:clamp(38px,4.6vw,60px);margin-top:14px}
+  article .lead{font-size:20px;color:var(--muted);margin-top:18px;line-height:1.5}
+  article .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  article h2{font-size:clamp(26px,2.6vw,34px);margin:52px 0 14px;scroll-margin-top:96px}
+  article p{margin:12px 0;font-size:17.5px;line-height:1.7}
+  article p a,.call a{color:var(--red);font-weight:600}
+  article ul.chk{list-style:none;margin:14px 0}
+  article ul.chk li{display:flex;gap:12px;padding:10px 0;border-top:1px solid var(--line)}
+  article ul.chk li::before{content:'';width:18px;height:18px;border-radius:5px;border:1.5px solid var(--ink);flex-shrink:0;margin-top:3px}
+  code{font-family:'Geist Mono',ui-monospace,monospace;font-size:.9em;background:var(--beige);padding:2px 6px;border-radius:6px}
+  figure{margin:28px 0}
+  figure .bp{width:100%;height:auto;border-radius:18px}
+  figcaption{font-size:14px;color:var(--muted);margin-top:10px}
+  .call{border-radius:18px;padding:18px 22px;margin:22px 0;display:flex;gap:14px;font-size:16px;line-height:1.6}
+  .call b{display:block;font-weight:600;margin-bottom:2px}
+  .call .i{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px}
+  .call.kural{background:var(--ink);color:var(--paper)}.call.kural .i{background:var(--red);color:#fff}
+  .call.ipucu{background:var(--white)}.call.ipucu .i{background:var(--beige);color:var(--ink)}
+  .call.dikkat{background:var(--red-2)}.call.dikkat .i{background:var(--red);color:#fff}
+  .formula{background:var(--white);border-radius:18px;padding:28px;margin:22px 0;text-align:center}
+  .formula .f{font-family:var(--serif);font-size:clamp(22px,3vw,32px);letter-spacing:-.01em}
+  .formula .f span{white-space:nowrap}
+  .formula small{display:block;color:var(--muted);margin-top:10px;font-size:14px}
+  table.t{width:100%;border-collapse:collapse;margin:22px 0;font-size:15px;background:var(--white);border-radius:18px;overflow:hidden}
+  table.t th{text-align:left;font-weight:600;background:var(--ink);color:var(--paper);padding:12px 16px;font-size:13px;letter-spacing:.04em}
+  table.t td{padding:12px 16px;border-top:1px solid var(--line);vertical-align:top}
+  .tw{overflow-x:auto}
+  .code{background:#1C1D22;border-radius:18px;margin:24px 0;overflow:hidden;color:#E8E4DA}
+  .code .bar2{display:flex;align-items:center;gap:4px;padding:8px 8px 0 12px;background:#16171B}
+  .code .bar2 button{font-family:'Geist Mono',monospace;font-size:13px;padding:9px 14px;border-radius:10px 10px 0 0;color:#8F8A80}
+  .code .bar2 button.on{background:#1C1D22;color:#fff}
+  .code .bar2 .cp{margin-left:auto;font-family:var(--sans);border-radius:999px;background:var(--dark-2);color:#E8E4DA;padding:6px 14px;margin-bottom:8px}
+  .code pre{margin:0;padding:18px 0;overflow-x:auto;font-family:'Geist Mono',ui-monospace,monospace;font-size:14px;line-height:1.7;counter-reset:ln}
+  .code pre span.l{display:block;padding:0 22px 0 0;white-space:pre}
+  .code pre span.l::before{counter-increment:ln;content:counter(ln);display:inline-block;width:44px;padding-right:16px;text-align:right;color:#55565C;user-select:none}
+  .code pre.out span.l::before{content:'›';color:var(--red)}
+  .k-c{color:#7D7A72;font-style:italic}.k-s{color:#9FD39A}.k-n{color:#FFB199}.k-k{color:#FF7A66}.k-f{color:#F2D48C}
+  .toc{position:sticky;top:96px;font-size:14px}
+  .toc b{display:block;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted-2);margin-bottom:10px;font-weight:600}
+  .toc a{display:block;padding:6px 0 6px 14px;border-left:2px solid var(--line);color:var(--muted)}
+  .toc a.on{border-left-color:var(--red);color:var(--ink);font-weight:600}
+  .pn{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:64px}
+  .pn a{background:var(--white);border-radius:18px;padding:20px 22px;display:flex;flex-direction:column;gap:4px}
+  .pn a:hover{box-shadow:0 12px 32px rgba(22,23,27,.07)}
+  .pn small{color:var(--muted-2);font-size:13px}
+  .pn b{font-family:var(--serif);font-weight:500;font-size:20px}
+  .mob{display:none}
+  @media (max-width:1140px){.doc{grid-template-columns:220px minmax(0,1fr);gap:36px}.toc{display:none}}
+  @media (max-width:860px){.doc{grid-template-columns:minmax(0,1fr)}.mob .input{width:100%;max-width:100%}.side{display:none}.mob{display:block;margin-bottom:8px}}
+  @media (max-width:600px){.pn{grid-template-columns:1fr}.call{padding:16px}.formula{padding:20px 14px}}
+</style>
+</head>
+<body>
+<div id="site-header"></div>
+<main class="wrap doc">
+  <nav class="side" id="side" aria-label="Dokümanlar"></nav>
+  <article id="art"></article>
+  <aside class="toc" id="toc"></aside>
+</main>
+<div id="site-footer"></div>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/app.js"></script>
+<script src="assets/js/series.js"></script>
+<script src="assets/js/docs.js"></script>
+<script>
+  var $ = function (id) { return document.getElementById(id); };
+  var D = USTA.docs, id = USTA.param('d'), doc = D.filter(function (d) { return d.id === id; })[0] || D[0];
+
+  var KW = { py: 'import|from|def|return|if|elif|else|while|for|in|not|and|or|None|True|False|break|continue|as|with', cpp: 'const|int|float|long|void|return|if|else|for|while|bool|true|false|char|unsigned' };
+  function hl(src, lang) {
+    if (lang === 'out') return USTA.esc(src);
+    var re = new RegExp('(' + (lang === 'py' ? '#[^\\n]*' : '//[^\\n]*') + ')|("(?:[^"\\\\\\n]|\\\\.)*"|\'(?:[^\'\\\\\\n]|\\\\.)*\')|\\b(0x[0-9A-Fa-f]+|\\d+(?:\\.\\d+)?)\\b|\\b(' + KW[lang] + ')\\b|\\b([A-Za-z_]\\w*)(?=\\()', 'g');
+    var out = '', last = 0, m;
+    while ((m = re.exec(src))) {
+      out += USTA.esc(src.slice(last, m.index));
+      var cls = m[1] ? 'c' : m[2] ? 's' : m[3] ? 'n' : m[4] ? 'k' : 'f';
+      out += '<span class="k-' + cls + '">' + USTA.esc(m[0]) + '</span>';
+      last = re.lastIndex;
+    }
+    return out + USTA.esc(src.slice(last));
+  }
+  function pre(t) { return '<pre class="' + (t.l === 'out' ? 'out' : '') + '">' + hl(t.c, t.l).split('\n').map(function (l) { return '<span class="l">' + (l || ' ') + '</span>'; }).join('') + '</pre>'; }
+  function slug(s) { return s.toLocaleLowerCase('tr').replace(/ç/g, 'c').replace(/ğ/g, 'g').replace(/ı/g, 'i').replace(/ö/g, 'o').replace(/ş/g, 's').replace(/ü/g, 'u').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+
+  var codes = [];
+  function block(b) {
+    if (b.h) return '<h2 id="' + slug(b.h) + '">' + b.h + '</h2>';
+    if (b.p) return '<p>' + b.p + '</p>';
+    if (b.fig) return '<figure>' + b.fig + '<figcaption>' + b.cap + '</figcaption></figure>';
+    if (b.callout) return '<div class="call ' + b.callout + '"><span class="i">' + ({ kural: '!', ipucu: '→', dikkat: '!' })[b.callout] + '</span><div><b>' + b.t + '</b>' + b.html + '</div></div>';
+    if (b.formula) return '<div class="formula"><div class="f">' + b.formula + '</div><small>' + b.cap + '</small></div>';
+    if (b.table) return '<div class="tw"><table class="t"><thead><tr>' + b.table.head.map(function (h) { return '<th>' + h + '</th>'; }).join('') + '</tr></thead><tbody>' + b.table.rows.map(function (r) { return '<tr>' + r.map(function (c, i) { return '<td>' + (i === 0 ? '<b style="font-weight:600">' + c + '</b>' : c) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table></div>';
+    if (b.list) return '<ul class="chk">' + b.list.map(function (l) { return '<li>' + l + '</li>'; }).join('') + '</ul>';
+    if (b.code) {
+      var k = codes.push(b.code) - 1;
+      return '<div class="code" data-k="' + k + '"><div class="bar2">' + b.code.map(function (t, i) { return '<button data-t="' + i + '" class="' + (i ? '' : 'on') + '">' + t.n + '</button>'; }).join('') + '<button class="cp">Kopyala</button></div><div class="body">' + pre(b.code[0]) + '</div></div>';
+    }
+    return '';
+  }
+
+  /* kenar menü */
+  var byArea = {};
+  D.forEach(function (d) { (byArea[d.area] = byArea[d.area] || []).push(d); });
+  var sideHtml = Object.keys(byArea).map(function (a) {
+    var A = USTA.areaById(a);
+    return '<div class="grp"><b>' + USTA.icon(A.icon) + A.name + '</b>' + byArea[a].map(function (d) { return '<a href="doc.html?d=' + d.id + '" class="' + (d === doc ? 'on' : '') + '">' + d.title + '</a>'; }).join('') + '</div>';
+  }).join('') + '<div class="grp"><b>Yakında</b>' + USTA.docsSoon.map(function (s) { return '<span class="soon">' + s[1] + '<small>yakında</small></span>'; }).join('') + '</div>';
+  $('side').innerHTML = '<div style="display:flex;gap:8px;align-items:center;margin-bottom:22px"><span class="eyebrow">Doc</span><span class="demo-pill">Demo</span></div>' + sideHtml;
+
+  /* makale */
+  var A = USTA.areaById(doc.area), T = USTA.tierById(doc.tier), idx = D.indexOf(doc), prev = D[idx - 1], next = D[idx + 1];
+  var heads = doc.blocks.filter(function (b) { return b.h; });
+  $('art').innerHTML =
+    '<div class="mob"><label class="sr" for="pick">Doküman seç</label><select id="pick" class="input" style="width:100%">' + D.map(function (d) { return '<option value="' + d.id + '"' + (d === doc ? ' selected' : '') + '>' + USTA.areaById(d.area).name + ' · ' + d.title + '</option>'; }).join('') + '</select></div>' +
+    '<div class="crumbs"><a href="doc.html">Doc</a><span>/</span><a href="akademi.html?a=' + doc.area + '">' + A.name + '</a><span>/</span><span style="color:var(--ink)">' + doc.title + '</span></div>' +
+    '<h1>' + doc.title + '</h1><p class="lead">' + doc.lead + '</p>' +
+    '<div class="meta"><span class="badge">' + T.name + ' · ' + T.level + '</span><span class="badge">' + doc.mins + ' dk okuma</span><span class="badge">' + doc.blocks.filter(function (b) { return b.fig; }).length + ' şema · ' + doc.blocks.filter(function (b) { return b.code; }).length + ' kod</span><span class="demo-pill">Temsilî içerik</span></div>' +
+    doc.blocks.map(block).join('') +
+    '<div class="card card-dark" style="margin-top:56px;display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap"><div><h3 style="color:#fff">' + (doc.exam ? 'Okudun. Şimdi sına.' : 'Videosunu da izle.') + '</h3><p style="color:#B9B3A7;margin-top:6px">' + (doc.exam ? 'Model Roket Kalfa alan sınavı bu dokümandaki konuları sorar.' : 'Bu konu ' + USTA.seriesById(doc.series).title + ' serisinde anlatılıyor.') + '</p></div><div style="display:flex;gap:10px;flex-wrap:wrap">' +
+      (doc.exam ? '<a class="btn btn-red" href="sinav.html">Sınava gir</a>' : '') + '<a class="btn" style="color:#fff;border:1.5px solid var(--dark-3)" href="akademi.html?a=' + doc.area + '&s=' + doc.series + '">Seriyi izle</a></div></div>' +
+    '<div class="pn">' + (prev ? '<a href="doc.html?d=' + prev.id + '"><small>← Önceki</small><b>' + prev.title + '</b></a>' : '<span></span>') + (next ? '<a href="doc.html?d=' + next.id + '" style="text-align:right"><small>Sonraki →</small><b>' + next.title + '</b></a>' : '') + '</div>';
+  document.title = doc.title + ' — USTA Doc';
+  $('toc').innerHTML = '<b>Bu sayfada</b>' + heads.map(function (h) { return '<a href="#' + slug(h.h) + '">' + h.h + '</a>'; }).join('');
+  $('pick').onchange = function () { location.href = 'doc.html?d=' + this.value; };
+
+  /* kod sekmeleri ve kopyalama */
+  $('art').addEventListener('click', function (e) {
+    var box = e.target.closest('.code'); if (!box) return;
+    var set = codes[+box.dataset.k], tb = e.target.closest('[data-t]');
+    if (tb) {
+      [].forEach.call(box.querySelectorAll('[data-t]'), function (b) { b.classList.toggle('on', b === tb); });
+      box.querySelector('.body').innerHTML = pre(set[+tb.dataset.t]);
+    } else if (e.target.closest('.cp')) {
+      var on = box.querySelector('[data-t].on'), txt = set[on ? +on.dataset.t : 0].c, btn = e.target.closest('.cp');
+      var done = function () { btn.textContent = 'Kopyalandı'; setTimeout(function () { btn.textContent = 'Kopyala'; }, 1500); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, function () { USTA.toast('Kopyalanamadı'); });
+      else { var ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); done(); } catch (er) {} ta.remove(); }
+    }
+  });
+
+  /* içindekiler vurgusu */
+  var tocLinks = [].slice.call(document.querySelectorAll('.toc a'));
+  function spy() {
+    var cur = 0;
+    heads.forEach(function (h, i) { var el = document.getElementById(slug(h.h)); if (el && el.getBoundingClientRect().top < 140) cur = i; });
+    tocLinks.forEach(function (a, i) { a.classList.toggle('on', i === cur); });
+  }
+  window.addEventListener('scroll', spy, { passive: true }); spy();
+</script>
+</body>
+</html>
